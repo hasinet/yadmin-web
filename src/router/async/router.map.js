@@ -17,20 +17,60 @@ const routerMap = {
         redirect: '/login',
         component: view.tabs
     },
-    dashboard: {
-        name: 'Dashboard',
+
+    //系统--------------------------------------------------start
+    system: {
+        path: 'system',
+        icon: 'setting',
+        name: '系统',
         component: view.blank
     },
-    workplace: {
-        name: '工作台',
-        component: () => import('@/pages/dashboard/workplace')
-    },
-    analysis: {
-        name: '分析页',
-        component: () => import('@/pages/dashboard/analysis')
-    },
+        system_auth: {
+            path: 'auth',
+            icon: 'lock',
+            name: '权限',
+            component: () => import('@/pages/dashboard/workplace')
+        },
+            system_auth_admin: {
+                path: 'admin',
+                icon: 'user',
+                name: '管理员',
+                component: () => import('@/pages/dashboard/analysis')
+            },
+            system_auth_role: {
+                path: 'role',
+                icon: 'team',
+                name: '角色',
+                component: () => import('@/pages/dashboard/analysis')
+            },
+            system_auth_menu: {
+                path: 'menu',
+                icon: 'menu',
+                name: '菜单',
+                component: () => import('@/pages/dashboard/analysis')
+            },
 
-    //开始
+        system_monitor: {
+            path: 'monitor',
+            icon: 'eye',
+            name: '监控',
+            component: () => import('@/pages/dashboard/workplace')
+        },
+            system_monitor_quartz: {
+                path: 'quartz',
+                icon: 'history',
+                name: '定时任务',
+                component: () => import('@/pages/dashboard/workplace')
+            },
+            system_monitor_application: {
+                path: 'application',
+                icon: 'appstore',
+                name: '应用监控',
+                component: () => import('@/pages/dashboard/workplace')
+            },
+    //系统--------------------------------------------------end
+
+
     form: {
         name: '表单页',
         icon: 'form',

@@ -6,7 +6,7 @@
       </a>
     </div>
     <div class="copyright">
-      Copyright<a-icon type="copyright" />{{copyright}}
+      Copyright<a-icon type="copyright" />2021 ytrue个人出品
     </div>
   </div>
 </template>
