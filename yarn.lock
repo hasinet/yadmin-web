@@ -2678,6 +2678,14 @@ cacheable-request@^6.0.0:
     normalize-url "^4.1.0"
     responselike "^1.0.2"
 
+call-bind@^1.0.0:
+  version "1.0.2"
+  resolved "https://registry.npm.taobao.org/call-bind/download/call-bind-1.0.2.tgz#b1d4e89e688119c3c9a903ad30abb2f6a919be3c"
+  integrity sha1-sdTonmiBGcPJqQOtMKuy9qkZvjw=
+  dependencies:
+    function-bind "^1.1.1"
+    get-intrinsic "^1.0.2"
+
 call-me-maybe@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npm.taobao.org/call-me-maybe/download/call-me-maybe-1.0.1.tgz#26d208ea89e37b5cbde60250a15f031c16a4d66b"
@@ -4997,6 +5005,15 @@ get-caller-file@^2.0.1:
   resolved "https://registry.npm.taobao.org/get-caller-file/download/get-caller-file-2.0.5.tgz#4f94412a82db32f36e3b0b9741f8a97feb031f7e"
   integrity sha1-T5RBKoLbMvNuOwuXQfipf+sDH34=
 
+get-intrinsic@^1.0.2:
+  version "1.1.1"
+  resolved "https://registry.npm.taobao.org/get-intrinsic/download/get-intrinsic-1.1.1.tgz#15f59f376f855c446963948f0d24cd3637b4abc6"
+  integrity sha1-FfWfN2+FXERpY5SPDSTNNje0q8Y=
+  dependencies:
+    function-bind "^1.1.1"
+    has "^1.0.3"
+    has-symbols "^1.0.1"
+
 get-stream@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npm.taobao.org/get-stream/download/get-stream-3.0.0.tgz#8e943d1358dc37555054ecbe2edb05aa174ede14"
@@ -6096,6 +6113,11 @@ jest-worker@^25.4.0:
     merge-stream "^2.0.0"
     supports-color "^7.0.0"
 
+js-base64@^3.6.0:
+  version "3.6.0"
+  resolved "https://registry.npm.taobao.org/js-base64/download/js-base64-3.6.0.tgz?cache=0&sync_timestamp=1604450326544&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fjs-base64%2Fdownload%2Fjs-base64-3.6.0.tgz#773e1de628f4f298d65a7e9842c50244751f5756"
+  integrity sha1-dz4d5ij08pjWWn6YQsUCRHUfV1Y=
+
 js-cookie@^2.2.1:
   version "2.2.1"
   resolved "https://registry.npm.taobao.org/js-cookie/download/js-cookie-2.2.1.tgz#69e106dc5d5806894562902aa5baec3744e9b2b8"
@@ -7171,6 +7193,11 @@ object-inspect@^1.7.0, object-inspect@~1.7.0:
   resolved "https://registry.npm.taobao.org/object-inspect/download/object-inspect-1.7.0.tgz#f4f6bd181ad77f006b5ece60bd0b6f398ff74a67"
   integrity sha1-9Pa9GBrXfwBrXs5gvQtvOY/3Smc=
 
+object-inspect@^1.9.0:
+  version "1.10.2"
+  resolved "https://registry.npm.taobao.org/object-inspect/download/object-inspect-1.10.2.tgz?cache=0&sync_timestamp=1618720187707&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fobject-inspect%2Fdownload%2Fobject-inspect-1.10.2.tgz#b6385a3e2b7cae0b5eafcf90cddf85d128767f30"
+  integrity sha1-tjhaPit8rgter8+Qzd+F0Sh2fzA=
+
 object-is@^1.0.1:
   version "1.1.2"
   resolved "https://registry.npm.taobao.org/object-is/download/object-is-1.1.2.tgz#c5d2e87ff9e119f78b7a088441519e2eec1573b6"
@@ -8211,6 +8238,13 @@ qs@6.7.0:
   resolved "https://registry.npm.taobao.org/qs/download/qs-6.7.0.tgz#41dc1a015e3d581f1621776be31afb2876a9b1bc"
   integrity sha1-QdwaAV49WB8WIXdr4xr7KHapsbw=
 
+qs@^6.10.1:
+  version "6.10.1"
+  resolved "https://registry.nlark.com/qs/download/qs-6.10.1.tgz#4931482fa8d647a5aab799c5271d2133b981fb6a"
+  integrity sha1-STFIL6jWR6Wqt5nFJx0hM7mB+2o=
+  dependencies:
+    side-channel "^1.0.4"
+
 qs@~6.5.2:
   version "6.5.2"
   resolved "https://registry.npm.taobao.org/qs/download/qs-6.5.2.tgz#cb3ae806e8740444584ef154ce8ee98d403f3e36"
@@ -8910,6 +8944,15 @@ shell-quote@^1.6.1:
   version "1.7.2"
   resolved "https://registry.npm.taobao.org/shell-quote/download/shell-quote-1.7.2.tgz#67a7d02c76c9da24f99d20808fcaded0e0e04be2"
   integrity sha1-Z6fQLHbJ2iT5nSCAj8re0ODgS+I=
+
+side-channel@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.npm.taobao.org/side-channel/download/side-channel-1.0.4.tgz?cache=0&sync_timestamp=1609270210432&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fside-channel%2Fdownload%2Fside-channel-1.0.4.tgz#efce5c8fdc104ee751b25c58d4290011fa5ea2cf"
+  integrity sha1-785cj9wQTudRslxY1CkAEfpeos8=
+  dependencies:
+    call-bind "^1.0.0"
+    get-intrinsic "^1.0.2"
+    object-inspect "^1.9.0"
 
 signal-exit@^3.0.0, signal-exit@^3.0.2:
   version "3.0.3"

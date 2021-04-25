@@ -78,6 +78,8 @@
     import {setAuthorization} from '@/utils/request'
     import {loadRoutes} from '@/utils/routerUtil'
     import {mapMutations} from 'vuex'
+    import {login1} from '@/services/login'
+
 
     export default {
         name: 'Login',
@@ -103,19 +105,26 @@
                         this.logging = true
                         const name = this.form.getFieldValue('name')
                         const password = this.form.getFieldValue('password')
-                        login(name, password).then(this.afterLogin)
+                        login1(name, password).then(this.afterLogin)
                     }
                 })
             },
             afterLogin(res) {
                 this.logging = false
                 const loginRes = res.data
-                if (loginRes.code >= 0) {
-                    const {user, permissions, roles} = loginRes.data
-                    this.setUser(user)
-                    this.setPermissions(permissions)
-                    this.setRoles(roles)
-                    setAuthorization({token: loginRes.data.token, expireAt: new Date(loginRes.data.expireAt)})
+                if (loginRes.code === 200) {
+                    //这里其实要去要去一次的数据的
+                    const {user, permissions} = loginRes.data
+                    //用户的信息
+                    this.setUser({
+                        "name": "ytrue",
+                        "avatar": "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80",
+                    })
+                    //这个是权限
+                    this.setPermissions([])
+                    //去掉role，这里只要permissions来认证
+                    //this.setRoles([])
+                    setAuthorization({token: loginRes.data.accessToken, expireAt: new Date(loginRes.data.expireAt)})
                     // 获取路由配置
                     getRoutesConfig().then(result => {
                         const routesConfig = result.data.data

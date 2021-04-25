@@ -23,9 +23,11 @@
     "date-fns": "^2.14.0",
     "enquire.js": "^2.1.6",
     "highlight.js": "^10.2.1",
+    "js-base64": "^3.6.0",
     "js-cookie": "^2.2.1",
     "mockjs": "^1.1.0",
     "nprogress": "^0.2.0",
+    "qs": "^6.10.1",
     "viser-vue": "^2.4.8",
     "vue": "^2.6.11",
     "vue-i18n": "^8.18.2",
@@ -57,7 +59,7 @@
     "whatwg-fetch": "^3.0.0"
   },
   "eslintConfig": {
-    "root": true,
+    "root": false,
     "env": {
       "node": true
     },

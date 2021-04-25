@@ -29,44 +29,44 @@ const routerMap = {
             path: 'auth',
             icon: 'lock',
             name: '权限',
-            component: () => import('@/pages/dashboard/workplace')
+            component: view.blank
         },
             system_auth_admin: {
                 path: 'admin',
                 icon: 'user',
                 name: '管理员',
-                component: () => import('@/pages/dashboard/analysis')
+                component: () => import('@/pages/system/auth/admin')
             },
             system_auth_role: {
                 path: 'role',
                 icon: 'team',
                 name: '角色',
-                component: () => import('@/pages/dashboard/analysis')
+                component: () => import('@/pages/form/basic')
             },
             system_auth_menu: {
                 path: 'menu',
                 icon: 'menu',
                 name: '菜单',
-                component: () => import('@/pages/dashboard/analysis')
+                component: () => import('@/pages/form/basic')
             },
 
         system_monitor: {
             path: 'monitor',
             icon: 'eye',
             name: '监控',
-            component: () => import('@/pages/dashboard/workplace')
+            component: () => import('@/pages/form/basic')
         },
             system_monitor_quartz: {
                 path: 'quartz',
                 icon: 'history',
                 name: '定时任务',
-                component: () => import('@/pages/dashboard/workplace')
+                component: () => import('@/pages/form/basic')
             },
             system_monitor_application: {
                 path: 'application',
                 icon: 'appstore',
                 name: '应用监控',
-                component: () => import('@/pages/dashboard/workplace')
+                component: () => import('@/pages/form/basic')
             },
     //系统--------------------------------------------------end
 
