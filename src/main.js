@@ -11,6 +11,11 @@ import Plugins from '@/plugins'
 import {initI18n} from '@/utils/i18n'
 import bootstrap from '@/bootstrap'
 import 'moment/locale/zh-cn'
+//基于vue,不依赖任何UI库的可拖拽弹窗组件---start
+import dragModalVue from "drag-modal-vue";
+import "drag-modal-vue/lib/main.css"
+Vue.use(dragModalVue);
+//基于vue,不依赖任何UI库的可拖拽弹窗组件---end
 
 const router = initRouter(store.state.setting.asyncRoutes)
 const i18n = initI18n('CN', 'US')

@@ -15,12 +15,12 @@ const apiPath = {
 export async function login1(username, password) {
     const base = makeBaseAuth('admin', '112233')
     let loginForm = {
-        username: username,
-        password: password,
+        username: 'admin',
+        password: '111111',
         grant_type: 'password',
         scope: 'all',
     }
-    return request(apiPath.login, METHOD.POST, qs.stringify(loginForm), {headers: {'Authorization': base,}})
+    return request(apiPath.login, METHOD.POST, qs.stringify(loginForm), {'Authorization': base})
 }
 
 

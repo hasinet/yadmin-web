@@ -29,7 +29,7 @@ const routerMap = {
             path: 'auth',
             icon: 'lock',
             name: '权限',
-            component: view.blank
+            component: () => import('@/pages/system/auth/admin')
         },
             system_auth_admin: {
                 path: 'admin',

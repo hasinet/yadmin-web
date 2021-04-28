@@ -938,6 +938,14 @@
     "@babel/helper-create-regexp-features-plugin" "^7.10.1"
     "@babel/helper-plugin-utils" "^7.10.1"
 
+"@babel/polyfill@^7.11.5":
+  version "7.12.1"
+  resolved "https://registry.npm.taobao.org/@babel/polyfill/download/@babel/polyfill-7.12.1.tgz#1f2d6371d1261bbd961f3c5d5909150e12d0bd96"
+  integrity sha1-Hy1jcdEmG72WHzxdWQkVDhLQvZY=
+  dependencies:
+    core-js "^2.6.5"
+    regenerator-runtime "^0.13.4"
+
 "@babel/preset-env@^7.9.6":
   version "7.10.2"
   resolved "https://registry.npm.taobao.org/@babel/preset-env/download/@babel/preset-env-7.10.2.tgz?cache=0&sync_timestamp=1590868394490&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40babel%2Fpreset-env%2Fdownload%2F%40babel%2Fpreset-env-7.10.2.tgz#715930f2cf8573b0928005ee562bed52fb65fdfb"
@@ -3277,6 +3285,11 @@ core-js-compat@^3.6.2, core-js-compat@^3.6.5:
     browserslist "^4.8.5"
     semver "7.0.0"
 
+core-js@2, core-js@^2.6.5:
+  version "2.6.12"
+  resolved "https://registry.nlark.com/core-js/download/core-js-2.6.12.tgz#d9333dfa7b065e347cc5682219d6f690859cc2ec"
+  integrity sha1-2TM9+nsGXjR8xWgiGdb2kIWcwuw=
+
 core-js@^2.4.0, core-js@^2.5.0:
   version "2.6.11"
   resolved "https://registry.npm.taobao.org/core-js/download/core-js-2.6.11.tgz?cache=0&sync_timestamp=1586450269267&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fcore-js%2Fdownload%2Fcore-js-2.6.11.tgz#38831469f9922bded8ee21c9dc46985e0399308c"
@@ -4108,6 +4121,15 @@ dotignore@~0.1.2:
   integrity sha1-+ULyIA0ow6dvvdbw7p8yV8ii6QU=
   dependencies:
     minimatch "^3.0.4"
+
+drag-modal-vue@^1.2.4:
+  version "1.2.4"
+  resolved "https://registry.nlark.com/drag-modal-vue/download/drag-modal-vue-1.2.4.tgz#fd8d46eb6732142704b0703d4598661bb05c2ac6"
+  integrity sha1-/Y1G62cyFCcEsHA9RZhmG7BcKsY=
+  dependencies:
+    "@babel/polyfill" "^7.11.5"
+    core-js "2"
+    vue "^2.6.12"
 
 duplexer3@^0.1.4:
   version "0.1.4"
@@ -10267,6 +10289,11 @@ vue@^2.5.3, vue@^2.6.10, vue@^2.6.11:
   version "2.6.11"
   resolved "https://registry.npm.taobao.org/vue/download/vue-2.6.11.tgz?cache=0&sync_timestamp=1592000011428&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fvue%2Fdownload%2Fvue-2.6.11.tgz#76594d877d4b12234406e84e35275c6d514125c5"
   integrity sha1-dllNh31LEiNEBuhONSdcbVFBJcU=
+
+vue@^2.6.12:
+  version "2.6.12"
+  resolved "https://registry.npm.taobao.org/vue/download/vue-2.6.12.tgz#f5ebd4fa6bd2869403e29a896aed4904456c9123"
+  integrity sha1-9evU+mvShpQD4pqJau1JBEVskSM=
 
 vuedraggable@^2.23.2:
   version "2.23.2"
