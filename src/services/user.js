@@ -15,6 +15,7 @@ export async function login(name, password) {
 }
 
 export async function getRoutesConfig() {
+  console.log("我来到这里了")
   return request(ROUTES, METHOD.GET)
 }
 

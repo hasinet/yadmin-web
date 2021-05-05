@@ -125,10 +125,12 @@
                     //去掉role，这里只要permissions来认证
                     //this.setRoles([])
                     setAuthorization({token: loginRes.data.accessToken, expireAt: new Date(loginRes.data.expireAt)})
-                    // 获取路由配置
+                    // 获取路由配置---这里是获得路由
                     getRoutesConfig().then(result => {
-                        const routesConfig = result.data.data
-                        loadRoutes(routesConfig)
+                       // const routesConfig = result.data.data
+                       var routesConfig = routerData();
+                        console.log(routesConfig)
+                        loadRoutes([routesConfig])
                         this.$router.push('/system/auth')
                         this.$message.success(loginRes.message, 3)
                     })
@@ -136,6 +138,38 @@
                     this.error = loginRes.message
                 }
             }
+        }
+    }
+
+    function routerData() {
+        return {
+            "router": "root",
+            "children": [
+                {
+                    "router": "system",
+                    "children": [
+                        {
+                            "router": "system_auth",
+                            "children": ["system_auth_admin", "system_auth_role", "system_auth_menu"]
+                        },
+                        {
+                            "router": "system_monitor",
+                            "children": ["system_monitor_quartz", "system_monitor_application"]
+                        }
+                    ]
+                },
+
+                {
+                    "router": "form",
+                    "children": ["basicForm"]
+                },
+                {
+                    "router": "basicForm",
+                    "name": "验权表单",
+                    "icon": "file-excel",
+                    "authority": "queryForm"
+                }
+            ]
         }
     }
 </script>

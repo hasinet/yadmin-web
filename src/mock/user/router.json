@@ -1,0 +1,29 @@
+{
+  "router": "root",
+  "children": [
+    {
+      "router": "system",
+      "children": [
+        {
+          "router": "system_auth",
+          "children": ["system_auth_admin", "system_auth_role", "system_auth_menu"]
+        },
+        {
+          "router": "system_monitor",
+          "children": ["system_monitor_quartz", "system_monitor_application"]
+        }
+      ]
+    },
+
+    {
+      "router": "form",
+      "children": ["basicForm"]
+    },
+    {
+      "router": "basicForm",
+      "name": "验权表单",
+      "icon": "file-excel",
+      "authority": "queryForm"
+    }
+  ]
+}
