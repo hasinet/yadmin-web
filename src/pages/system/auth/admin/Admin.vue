@@ -36,15 +36,14 @@
             <!--头部菜单 start-->
             <a-space class="operator">
                 <a-button icon="form" type="primary" @click="addOrUpdateHandle()">新增</a-button>
-                <a-button icon="delete" type="danger">批量删除</a-button>
+                <a-button icon="delete" type="danger" @click="handleBatchDelete">批量删除</a-button>
             </a-space>
             <!--头部菜单 end-->
             <standard-table
-                    row-key="username"
+                    row-key="userId"
                     :columns="columns"
                     :dataSource="dataSource"
                     :selectedRows.sync="selectedRows"
-                    @clear="onClear"
                     @change="onChange"
                     :loading="initLoading"
                     :pagination="pagination"
@@ -58,9 +57,10 @@
                 </div>
 
                 <div slot="action" slot-scope="{text, record}">
-                    <a-button style="background-color: #108ee9;border-color:#108ee9" icon="edit" type="primary">编辑
+                    <a-button style="background-color: #108ee9;border-color:#108ee9" icon="edit" type="primary"
+                              @click="addOrUpdateHandle(record.userId)">编辑
                     </a-button>
-                    <a-button icon="delete" style="margin-left: 8px">删除</a-button>
+                    <a-button icon="delete" style="margin-left: 8px" @click="handleDelete(record)">删除</a-button>
                 </div>
             </standard-table>
 
@@ -77,7 +77,7 @@
 
 <script>
     import StandardTable from '@/components/table/StandardTable'
-    import {page} from '@/services/system/auth/admin'
+    import {page, remove} from '@/services/system/auth/admin'
     import AddOrUpdate from "./modules/AddOrUpdate";
 
     export default {
@@ -85,6 +85,7 @@
         name: "Admin",
         data() {
             return {
+                ids: [],
                 visible: true,
                 searchButtonLoading: false,
                 resetButtonLoading: false,
@@ -96,6 +97,10 @@
                     showTotal: total => `共 ${total} 条数据`,
                 },
                 columns: [
+                    {
+                        title: 'id',
+                        dataIndex: 'userId',
+                    },
                     {
                         title: '账号',
                         dataIndex: 'username',
@@ -140,7 +145,7 @@
                 page({
                     currentPage: this.currentPage,
                     fields: searchParam,
-                    limit: 2
+                    limit: 5
                 }).then(response => {
                     const {data} = response.data
                     this.dataSource = data.records
@@ -152,7 +157,53 @@
                 })
             },
             /**
-             *新增 / 修改
+             * 删除记录
+             */
+            handleDelete(item) {
+                const app = this
+                const modal = this.$confirm({
+                    title: '您确定要删除该记录吗?',
+                    content: '删除后不可恢复',
+                    onOk() {
+                        remove([item['userId']])
+                            .then((result) => {
+                                app.$message.success(result.data.message, 1.5)
+                                app.resetSearch()
+                            }).catch(() => {
+                            modal.destroy()
+                        })
+                    }
+                })
+            },
+
+            /**
+             *批量删除
+             */
+            handleBatchDelete() {
+                const app = this
+                //判断一下
+                let delIds = app.ids
+                if (delIds.length === 0) {
+                    app.$message.error('请选择需要删除的数据', 1.5)
+                    return
+                }
+                const modal = this.$confirm({
+                    title: '您确定要删除选择的记录吗?',
+                    content: '删除后不可恢复',
+                    onOk() {
+                        remove(delIds)
+                            .then((result) => {
+                                app.$message.success(result.data.message, 1.5)
+                                app.resetSearch()
+                            }).catch(() => {
+                            modal.destroy()
+                        })
+                    }
+                })
+            },
+
+            /**
+             *新增 - 修改
              */
             addOrUpdateHandle(id) {
                 this.$nextTick(() => {
@@ -188,26 +239,12 @@
                 this.currentPage = selectedRowKeys.current
                 this.init()
             },
-
-
-            deleteRecord(key) {
-                this.dataSource = this.dataSource.filter(item => item.key !== key)
-                this.selectedRows = this.selectedRows.filter(item => item.key !== key)
-            },
-
-            remove() {
-                this.dataSource = this.dataSource.filter(item => this.selectedRows.findIndex(row => row.key === item.key) === -1)
-                this.selectedRows = []
-            },
-            onClear() {
-                this.$message.info('您清空了勾选的所有行')
-            },
-            onStatusTitleClick() {
-                this.$message.info('你点击了状态栏表头')
-            },
-
-            onSelectChange() {
-                this.$message.info('选中行改变了')
+            /**
+             * select 动作
+             * @param row
+             */
+            onSelectChange(row) {
+                this.ids = row
             }
         }
     }

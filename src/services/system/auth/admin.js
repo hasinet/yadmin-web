@@ -36,3 +36,12 @@ export function saveAndUpdate(params) {
 export function getUserById(id) {
     return request(apiPath.info + id, 'get')
 }
+
+/**
+ * 删除
+ * @param data
+ * @returns {*}
+ */
+export function remove(data) {
+    return request(apiPath.remove, 'delete', data)
+}

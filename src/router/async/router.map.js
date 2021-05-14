@@ -29,7 +29,8 @@ const routerMap = {
             path: 'auth',
             icon: 'lock',
             name: '权限',
-            component: () => import('@/pages/system/auth/admin')
+            component: view.blank,
+            redirect: '/system/auth/admin'
         },
             system_auth_admin: {
                 path: 'admin',
@@ -41,7 +42,7 @@ const routerMap = {
                 path: 'role',
                 icon: 'team',
                 name: '角色',
-                component: () => import('@/pages/form/basic')
+                component: () => import('@/pages/system/auth/role')
             },
             system_auth_menu: {
                 path: 'menu',

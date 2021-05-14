@@ -142,7 +142,7 @@
                     if (this.formId) {
                         getUserById(this.formId).then(({data}) => {
                             //设置值
-                            const data1 = _.pick(data, ['username', 'mobile', 'email', 'status', 'roleIdList'])
+                            const data1 = _.pick(data.data, ['username', 'mobile', 'email', 'status', 'roleIdList'])
                             const {form: {setFieldsValue}} = this
                             this.$nextTick(() => {
                                 setFieldsValue(data1)
