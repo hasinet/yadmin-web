@@ -1,6 +1,6 @@
 <template>
-    <!--查询 start-->
     <a-card>
+        <!--查询 start-->
         <div>
             <a-form layout="horizontal" :form="searchFrom">
                 <div>
@@ -98,7 +98,7 @@
                 },
                 columns: [
                     {
-                        title: 'id',
+                        title: 'ID',
                         dataIndex: 'userId',
                     },
                     {
