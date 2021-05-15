@@ -67,16 +67,22 @@
         </div>
         <!--表格end-->
 
+        <add-or-update
+                @handleSubmit="resetSearch"
+                ref="addOrUpdate">
+        </add-or-update>
+
     </a-card>
 </template>
 
 <script>
     import StandardTable from '@/components/table/StandardTable'
     import {page, remove} from '@/services/system/auth/role'
+    import AddOrUpdate from "./modules/AddOrUpdate";
 
     export default {
         name: "Role",
-        components: {StandardTable},
+        components: {StandardTable, AddOrUpdate},
         data() {
             return {
                 ids: [],
@@ -225,7 +231,15 @@
              */
             onSelectChange(row) {
                 this.ids = row
-            }
+            },
+            /**
+             *新增 - 修改
+             */
+            addOrUpdateHandle(id) {
+                this.$nextTick(() => {
+                    this.$refs.addOrUpdate.init(id)
+                })
+            },
         }
     }
 </script>
