@@ -25,6 +25,25 @@ export async function page(data) {
     return request(apiPath.page, 'post', data)
 }
 
+/**
+ * 新增或者編輯
+ * @param params
+ * @returns {*}
+ */
+export function saveAndUpdate(params) {
+    let method = params.roleId ? 'put' : 'post'
+    return request(apiPath.saveAndUpdate, method, params)
+}
+
+/**
+ * 获得信息
+ * @param id
+ * @returns {*}
+ */
+export function getUserById(id) {
+    return request(apiPath.info + id, 'get')
+}
+
 
 /**
  * 删除

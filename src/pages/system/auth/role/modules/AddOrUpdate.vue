@@ -1,76 +1,46 @@
 <template>
-    <drag-modal-vue
-            :maskClosable="false"
-            :width="720"
-            v-model="visible"
+    <a-modal
             :title="!formId ? '新增' : '修改'"
+            :width="720"
+            :visible="visible"
+            :confirmLoading="confirmLoading"
+            :maskClosable="false"
+            @ok="handleSubmit"
+            @cancel="handleCancel"
+            :bodyStyle="bodyStyle"
     >
+        <a-spin :spinning="confirmLoading">
+            <a-form :form="form">
 
+                <a-form-item label="角色名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                    <a-input v-decorator="['roleName', {rules: [{required: true,message: '角色名称不得为空'}]}]"/>
+                </a-form-item>
 
-        <a-tree
-                v-model="checkedKeys"
-                checkable
-                :expanded-keys="expandedKeys"
-                :auto-expand-parent="autoExpandParent"
-                :selected-keys="selectedKeys"
-                :tree-data="treeData"
-                @expand="onExpand"
-                @select="onSelect"
+                <a-form-item label="权限" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                    <a-tree
+                            v-if="treeData.length > 0"
+                            :default-expand-all="false"
+                            :replace-fields="replaceFields"
+                            v-model="checkedKeys"
+                            checkable
+                            :tree-data="treeData"
+                            @check="onBusinessSelectChange"
+                            :checkedKeys="checkedKeys"
+                    />
+                </a-form-item>
 
+                <a-form-item label="备注" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                    <a-textarea type="textarea" v-decorator="['remark']"/>
+                </a-form-item>
+            </a-form>
+        </a-spin>
 
-                @check="onBusinessSelectChange"
-                :checkedKeys="checkedKeys"
-
-        />
-
-
-    </drag-modal-vue>
+    </a-modal>
 </template>
 
 <script>
-    const treeData = [
-        {
-            title: '0-0',
-            key: '0-0',
-            children: [
-                {
-                    title: '一级01',
-                    key: '0-0-0',
-                    children: [
-                        {title: '0-0-0-0', key: '0-0-0-0'},
-                        {title: '0-0-0-1', key: '0-0-0-1'},
-                        {title: '0-0-0-2', key: '0-0-0-2'},
-                    ],
-                },
-                {
-                    title: '0-0-1',
-                    key: '0-0-1',
-                    children: [
-                        {title: '0-0-1-0', key: '0-0-1-0'},
-                        {title: '0-0-1-1', key: '0-0-1-1'},
-                        {title: '0-0-1-2', key: '0-0-1-2'},
-                    ],
-                },
-                {
-                    title: '0-0-2',
-                    key: '0-0-2',
-                },
-            ],
-        },
-        {
-            title: '0-1',
-            key: '0-1',
-            children: [
-                {title: '0-1-0-0', key: '0-1-0-0'},
-                {title: '0-1-0-1', key: '0-1-0-1'},
-                {title: '0-1-0-2', key: '0-1-0-2'},
-            ],
-        },
-        {
-            title: '0-2',
-            key: '0-2',
-        },
-    ];
+    import {table} from '@/services/system/auth/menu'
+    import {saveAndUpdate, getUserById} from '@/services/system/auth/role'
 
     export default {
         name: "AddOrUpdate",
@@ -80,55 +50,146 @@
                 visible: false,
                 //id
                 formId: null,
-                //tree
-                expandedKeys: ['0-0-0', '0-0-1'],
-                autoExpandParent: true,
-                //原来是这样的
+                // modal(对话框)确定按钮 loading
+                confirmLoading: true,
+                //弹窗样式
+                bodyStyle: {
+                    'max-height': '500px',
+                    'overflow': 'auto'
+                },
+                // 当前表单元素
+                form: this.$form.createForm(this),
+                // 标签布局属性
+                labelCol: {
+                    span: 7
+                },
+                // 输入框布局属性
+                wrapperCol: {
+                    span: 13
+                },
+                //这个是初始值
                 checkedKeys: [],
-                selectedKeys: [],
-                treeData,
+                //tree初始化数据
+                treeData: [],
+                //半选的节点
                 businessSelectedRowKeys: [],
+                //全部选中的节点
                 allSelectedNodes: [],
+                //自定义tree的数据结构
+                replaceFields: {
+                    children: 'children',
+                    title: 'name',
+                    key: 'menuId',
+                },
+
+
             }
         },
-        // watch: {
-        //     checkedKeys(val, halfChecked) {
-        //         console.log('onCheck11', halfChecked);
-        //         console.log(this.allSelectedNodes)
-        //     },
-        // },
         methods: {
             onBusinessSelectChange(selectedKeys, info) {
-                // console.log('selectedKeys changed: ', selectedKeys);
-                // console.log('info changed: ', info);
                 // 已勾选子节点以及半勾选状态的父节点
                 this.allSelectedNodes = selectedKeys.concat(info.halfCheckedKeys);
                 this.businessSelectedRowKeys = selectedKeys;
                 console.log(this.allSelectedNodes)
             },
-
-
-            onExpand(expandedKeys) {
-                console.log('onExpand', expandedKeys);
-                // if not set autoExpandParent to false, if children expanded, parent can not collapse.
-                // or, you can remove all expanded children keys.
-                this.expandedKeys = expandedKeys;
-                this.autoExpandParent = false;
-            },
-            onCheck(checkedKeys) {
-                console.log('onCheck', checkedKeys);
-                this.checkedKeys = checkedKeys;
-            },
-            onSelect(selectedKeys, info) {
-                console.log('onSelect', info);
-                this.selectedKeys = selectedKeys;
-            },
             /**
              *数据初始化
              */
             init(id) {
-                //this.confirmLoading = true
+                this.confirmLoading = true
                 this.visible = true
+                this.formId = id || 0
+                this.checkedKeys = []
+                this.allSelectedNodes = []
+                table().then(({data}) => {
+                    const menuData = data.data
+                    this.treeData = this.treeDataTranslate(menuData, "menuId", "parentId")
+                    this.confirmLoading = false
+                }).then(() => {
+                    if (this.formId) {
+                        getUserById(this.formId).then(({data}) => {
+                            //设置值
+                            const data1 = data.data
+                            this.form.setFieldsValue({roleName: data1.roleName, remark: data1.remark})
+                            this.checkedKeys = data1.menuIdList
+                            this.allSelectedNodes = data1.menuIdList
+                        })
+                    }
+                }).catch(() => {
+                })
+            },
+            /**
+             * 确认按钮
+             */
+            handleSubmit(e) {
+                // if (this.confirmLoading === true) return
+                e.preventDefault()
+                const {form: {validateFields}} = this
+                // 表单验证
+                validateFields((errors, values) => {
+                    // 提交到后端api
+                    if (errors === null) {
+                        //这里要判断一下是否填写了权限
+                        //allSelectedNodes
+                        if (this.allSelectedNodes.length === 0) {
+                            this.$message.error('请选择权限', 1.5)
+                            return
+                        }
+                        values.roleId = this.formId
+                        values.menuIdList = this.allSelectedNodes
+                        this.onFormSubmit(values)
+                    }
+                })
+            },
+            /**
+             * 提交到后端api
+             */
+            onFormSubmit(values) {
+                this.confirmLoading = true
+                saveAndUpdate(values).then((result) => {
+                    // 显示成功
+                    this.$message.success(result.data.message, 1.5)
+                    // 关闭对话框
+                    this.handleCancel()
+                    // 通知父端组件提交完成了
+                    this.$emit('handleSubmit', values)
+                }).catch(() => {
+                }).finally(() => {
+                    this.confirmLoading = false
+                })
+            },
+            /**
+             * 关闭对话框事件
+             */
+            handleCancel() {
+                this.visible = false
+                this.form.resetFields()
+                this.treeData = []
+                this.checkedKeys = []
+                this.defaultExpandAll = false
+            },
+
+            treeDataTranslate(data, id = 'id', pid = 'parentId') {
+                let res = []
+                let temp = {}
+                for (var i = 0; i < data.length; i++) {
+                    temp[data[i][id]] = data[i]
+                }
+                for (let k = 0; k < data.length; k++) {
+                    if (temp[data[k][pid]] && data[k][id] !== data[k][pid]) {
+                        if (!temp[data[k][pid]]['children']) {
+                            temp[data[k][pid]]['children'] = []
+                        }
+                        if (!temp[data[k][pid]]['_level']) {
+                            temp[data[k][pid]]['_level'] = 1
+                        }
+                        data[k]['_level'] = temp[data[k][pid]]._level + 1
+                        temp[data[k][pid]]['children'].push(data[k])
+                    } else {
+                        res.push(data[k])
+                    }
+                }
+                return res
             }
         }
     }
