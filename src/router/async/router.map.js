@@ -48,7 +48,7 @@ const routerMap = {
                 path: 'menu',
                 icon: 'menu',
                 name: '菜单',
-                component: () => import('@/pages/form/basic')
+                component: () => import('@/pages/system/auth/menu')
             },
 
         system_monitor: {

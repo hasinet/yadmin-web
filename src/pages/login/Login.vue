@@ -127,8 +127,8 @@
                     setAuthorization({token: loginRes.data.accessToken, expireAt: new Date(loginRes.data.expireAt)})
                     // 获取路由配置---这里是获得路由
                     getRoutesConfig().then(result => {
-                       // const routesConfig = result.data.data
-                       var routesConfig = routerData();
+                        // const routesConfig = result.data.data
+                        var routesConfig = routerData();
                         console.log(routesConfig)
                         loadRoutes([routesConfig])
                         this.$router.push('/system/auth')
@@ -146,11 +146,37 @@
             "router": "root",
             "children": [
                 {
+                    "name": "系统",
+                    "icon": 'setting',
                     "router": "system",
+                    "path": 'system',
                     "children": [
                         {
+                            "name": '权限',
+                            "icon": 'lock',
+                            "path": 'auth',
                             "router": "system_auth",
-                            "children": ["system_auth_admin", "system_auth_role", "system_auth_menu"]
+                            "redirect": "/system/auth/admin",
+                            "children": [
+                                {
+                                    "router": "system_auth_admin",
+                                    "name": '管理员',
+                                    "icon": 'user',
+                                    "path": 'admin',
+                                },
+                                {
+                                    "router": "system_auth_role",
+                                    "name": '角色',
+                                    "icon": 'team',
+                                    "path": 'role',
+                                },
+                                {
+                                    "router": "system_auth_menu",
+                                    "name": '菜单',
+                                    "icon": 'menu',
+                                    "path": 'menu',
+                                },
+                            ]
                         },
                         {
                             "router": "system_monitor",
