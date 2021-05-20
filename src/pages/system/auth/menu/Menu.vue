@@ -3,14 +3,13 @@
         <!--查询 start-->
         <div style="margin-bottom: 18px;">
             <a-space class="operator">
-                <a-button icon="form" type="primary">新增</a-button>
-                <a-button icon="delete" type="danger">批量删除</a-button>
+                <a-button icon="form" type="primary" @click="addOrUpdateHandle()">新增</a-button>
+                <a-button icon="delete" type="danger" @click="handleBatchDelete">批量删除</a-button>
             </a-space>
         </div>
 
         <div>
             <a-table
-                    row-key="menuId"
                     :columns="columns"
                     :data-source="tabData"
                     :customRow="tableClick"
@@ -25,19 +24,32 @@
                 </div>
             </a-table>
         </div>
+
+        <!--表格end-->
+        <add-or-update
+                @handleSubmit="init"
+                ref="addOrUpdate">
+        </add-or-update>
     </a-card>
 </template>
 
 <script>
-    import {list} from '@/services/system/auth/menu'
+    import {table} from '@/services/system/auth/menu'
     import {treeDataTranslate} from '@/utils/util'
+    import AddOrUpdate from "./modules/AddOrUpdate";
 
     export default {
         name: "Menu",
+        components: {AddOrUpdate},
         data() {
             return {
                 //表格字段
                 columns: [
+                    {
+                        title: 'id',
+                        dataIndex: 'menuId',
+                        key: 'menuId'
+                    },
                     {
                         title: '名称',
                         dataIndex: 'name',
@@ -57,8 +69,12 @@
                     },
 
                     {
-                        title: '权限',
+                        title: '权限标识',
                         dataIndex: 'perms',
+                    },
+                    {
+                        title: 'icon',
+                        dataIndex: 'icon',
                     },
                     {
                         title: '级别',
@@ -86,12 +102,28 @@
         },
         methods: {
             init() {
-                list().then(response => {
+                table().then(response => {
                     const menuData = response.data.data
+                    menuData.forEach(item => {
+                        item.key = item.menuId
+                    })
                     this.tabData = treeDataTranslate(menuData, "menuId", "parentId")
                 })
             },
+            /**
+             *新增 - 修改
+             */
+            addOrUpdateHandle(id) {
+                this.$nextTick(() => {
+                    this.$refs.addOrUpdate.init(id)
+                })
+            },
+            /**
+             *批量删除
+             */
+            handleBatchDelete() {
 
+            },
 
             onSelectAll(selected) {
                 if (selected) {
