@@ -167,7 +167,6 @@
                 this.form.resetFields()
                 this.treeData = []
                 this.checkedKeys = []
-                this.defaultExpandAll = false
             },
 
 

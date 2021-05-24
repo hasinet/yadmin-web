@@ -16,6 +16,17 @@ const respCommon = {
             return Promise.reject(new Error('错误请求'))
         }
 
+        if (data.code === 900) {
+            //message.error('错误请求')
+
+            let msg = ''
+            data.data.forEach(function (value, index) {
+                msg += parseInt(index + 1) + '. ' + value
+            })
+            message.error(h('a', {href: '//www.baidu.com'}, ['百度官网']))
+            return Promise.reject(new Error(msg))
+        }
+
         if (data.code !== 200) {
             message.error(data.message)
             return Promise.reject()

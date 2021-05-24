@@ -1,5 +1,6 @@
-import {request, METHOD} from '@/utils/request'
+import {request, METHOD,setAuthorization} from '@/utils/request'
 import qs from 'qs'
+import Cookie from 'js-cookie'
 
 const apiPath = {
     login: 'http://127.0.0.1:9995/oauth/token',
@@ -13,6 +14,8 @@ const apiPath = {
  * @returns {Promise<*>}
  */
 export async function login1(username, password) {
+    //清除一下cookie，不然会把Authorization带过去，导致接口返回错误
+    Cookie.remove("Authorization")
     const base = makeBaseAuth('admin', '112233')
     let loginForm = {
         username: 'admin',

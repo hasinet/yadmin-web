@@ -13,7 +13,6 @@
             <a-form :form="form">
 
                 <a-form-item label="上级菜单" :labelCol="labelCol" :wrapperCol="wrapperCol">
-
                     <a-tree-select
                             v-model="value"
                             style="width: 100%"
@@ -21,17 +20,13 @@
                             :tree-data="treeData"
                             placeholder="请选择上级菜单"
                             :replaceFields="replaceFields"
-                            tree-default-expand-all
-                    >
-                        <span v-if="key === '0-0-1'" slot="title" slot-scope="{ key, value }" style="color: #08c">
-                          {{ value }}
-                        </span>
+                            tree-default-expand-all>
                     </a-tree-select>
 
                 </a-form-item>
 
                 <a-form-item label="名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input v-decorator="['name', {rules: [{required: true,message: '名称不得为空'}]}]"/>
+                    <a-input v-decorator="['name']"/>
                 </a-form-item>
 
                 <a-form-item label="路由" :labelCol="labelCol" :wrapperCol="wrapperCol">
@@ -74,14 +69,14 @@
 </template>
 
 <script>
-    import {list} from '@/services/system/auth/menu'
+    import {list, saveAndUpdate} from '@/services/system/auth/menu'
     import {treeDataTranslate} from '@/utils/util'
 
     export default {
         name: "AddOrUpdate",
         data() {
             return {
-                treeData:[],
+                treeData: [],
                 value: undefined,
                 //是否弹窗
                 visible: false,
@@ -111,7 +106,7 @@
                     children: 'children',
                     title: 'name',
                     key: 'menuId',
-                    value:'menuId'
+                    value: 'menuId'
                 },
             }
         },
@@ -121,21 +116,62 @@
                 this.confirmLoading = false
                 list().then(response => {
                     const menuData = response.data.data
-                    this.treeData= treeDataTranslate(menuData, "menuId", "parentId")
+                    this.treeData = treeDataTranslate(menuData, "menuId", "parentId")
 
+                    //头部插入
+                    this.treeData.unshift({
+                        "menuId": 0,
+                        "name": "无上级菜单",
+                    });
+                    this.value = 0
                 })
             },
             /**
              * 确认按钮
              */
             handleSubmit(e) {
-                this.visible = false
+                // if (this.confirmLoading === true) return
+                e.preventDefault()
+                const {form: {validateFields}} = this
+                // 表单验证
+                validateFields((errors, values) => {
+                    // 提交到后端api
+                    if (errors === null) {
+                        this.onFormSubmit(values)
+                    }
+                })
             },
+
+            /**
+             * 提交到后端api
+             */
+            onFormSubmit(values) {
+                let that = this
+                that.confirmLoading = true
+                saveAndUpdate(values).then((result) => {
+                    // 显示成功
+                    that.$message.success(result.data.message, 1.5)
+                    // 关闭对话框
+                    that.handleCancel()
+                    // 通知父端组件提交完成了
+                    that.$emit('handleSubmit', values)
+                    that.confirmLoading = false
+                }).catch((e) => {
+                    setTimeout(function () {
+                        console.log(e)
+                        that.confirmLoading = false
+                    },200)
+                })
+            },
+
             /**
              * 关闭对话框事件
              */
             handleCancel() {
                 this.visible = false
+                this.treeData = []
+                this.value = undefined
+                this.form.resetFields()
             },
         }
     }
