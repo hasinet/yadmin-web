@@ -55,19 +55,20 @@ const routerMap = {
             path: 'monitor',
             icon: 'eye',
             name: '监控',
-            component: () => import('@/pages/form/basic')
+            component: view.blank,
+            redirect: '/system/monitor/quartz'
         },
             system_monitor_quartz: {
                 path: 'quartz',
                 icon: 'history',
                 name: '定时任务',
-                component: () => import('@/pages/form/basic')
+                component: () => import('@/pages/system/monitor/quartz')
             },
             system_monitor_application: {
                 path: 'application',
                 icon: 'appstore',
                 name: '应用监控',
-                component: () => import('@/pages/form/basic')
+                component: () => import('@/pages/system/monitor/application')
             },
     //系统--------------------------------------------------end
 
