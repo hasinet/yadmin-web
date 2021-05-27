@@ -58,9 +58,10 @@
 
                 <div slot="action" slot-scope="{text, record}">
                     <a-button style="background-color: #108ee9;border-color:#108ee9" icon="edit" type="primary"
-                              @click="addOrUpdateHandle(record.roleId)">编辑
+                              size="small" @click="addOrUpdateHandle(record.roleId)">编辑
                     </a-button>
-                    <a-button icon="delete" style="margin-left: 8px" @click="handleDelete(record)">删除</a-button>
+                    <a-button size="small" icon="delete" type="danger" style="margin-left: 8px" @click="handleDelete(record)">删除
+                    </a-button>
                 </div>
             </standard-table>
 

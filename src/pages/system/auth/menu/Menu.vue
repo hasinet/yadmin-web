@@ -18,9 +18,10 @@
                     :row-selection="{selectedRowKeys: selectedRowKeys, onSelectAll: onSelectAll, onSelect: onSelect}"
             >
                 <div slot="action" slot-scope="{text, record}">
-                    <a-button style="background-color: #108ee9;border-color:#108ee9" icon="edit" type="primary">编辑
+                    <a-button size="small" style="background-color: #108ee9;border-color:#108ee9" icon="edit"
+                              type="primary">编辑
                     </a-button>
-                    <a-button icon="delete" style="margin-left: 8px">删除</a-button>
+                    <a-button size="small" type="danger" icon="delete" style="margin-left: 8px">删除</a-button>
                 </div>
             </a-table>
         </div>

@@ -1,7 +1,7 @@
 <template>
-    <a-card>
+    <div>
         <iframe :scrolling="scrolling" :src="urlPath" class="iframe" ref="iframe"></iframe>
-    </a-card>
+    </div>
 </template>
 
 <script>

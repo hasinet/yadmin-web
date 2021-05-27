@@ -62,6 +62,39 @@
                     :pagination="pagination"
                     @selectedRowChange="onSelectChange"
             >
+
+                <div slot="action" slot-scope="{text, record}">
+                    <a-button
+                            size="small"
+                            style="background-color: #108ee9;border-color:#108ee9"
+                            icon="edit"
+                            type="primary"
+                    >编辑
+                    </a-button>
+                    <a-button
+                            type="danger"
+                            size="small"
+                            icon="delete"
+                            style="margin-left: 8px"
+                    >删除
+                    </a-button>
+
+                    <a-button size="small" icon="forward"
+                              style=" color: #fff; background-color: #e6a23c; border-color: #e6a23c;margin-top: 8px;">
+                        暂停
+                    </a-button>
+
+                    <a-button size="small" icon="pause"
+                              style=" color: #fff; background-color: #67c23a; border-color: #67c23a;margin-top: 8px;margin-left: 8px">
+                        恢复
+                    </a-button>
+
+                    <a-button size="small" icon="thunderbolt"
+                              style=" color: #fff; background-color: #409eff; border-color: #409eff;margin-top: 8px;">
+                        立即执行
+                    </a-button>
+                </div>
+
             </standard-table>
         </div>
 
@@ -71,12 +104,16 @@
 
 <script>
     import StandardTable from '@/components/table/StandardTable'
+    import {page, remove} from '@/services/system/monitor/quartz'
 
     export default {
         components: {StandardTable},
         name: "Quartz",
         data() {
             return {
+                searchButtonLoading: false,
+                resetButtonLoading: false,
+                initLoading: true,
                 searchFrom: this.$form.createForm(this),
                 selectedRows: [],
                 pagination: {
@@ -120,6 +157,63 @@
                         align: 'center'
                     }
                 ]
+            }
+        },
+        mounted() {
+            this.init();
+        },
+        methods: {
+            /**
+             *初始化数据
+             */
+            init(type = "") {
+                this.buttonLoading(type, true)
+                let beanName = this.searchFrom.getFieldValue('beanName')
+                let searchParam = [
+                    {column: 'bean_name', type: 'like', value: beanName ? beanName : ""}
+                ]
+                page({
+                    currentPage: this.currentPage,
+                    fields: searchParam,
+                    limit: 5
+                }).then(response => {
+                    const {data} = response.data
+                    this.dataSource = data.records
+                    this.pagination.pageSize = data.size
+                    this.pagination.total = data.total
+                    this.initLoading = false
+                    this.buttonLoading(type, false)
+                }).catch(() => {
+                })
+            },
+            /**
+             * 按钮的loading状态
+             * @param type
+             * @param status
+             */
+            buttonLoading(type, status) {
+                if (type === "search") {
+                    this.searchButtonLoading = status
+                }
+                if (type === "reset") {
+                    this.resetButtonLoading = status
+                }
+                this.initLoading = status
+            },
+            /**
+             * 分页处理
+             * @param selectedRowKeys
+             */
+            onChange(selectedRowKeys) {
+                this.currentPage = selectedRowKeys.current
+                this.init()
+            },
+            /**
+             * select 动作
+             * @param row
+             */
+            onSelectChange(row) {
+                this.ids = row
             }
         }
     }
