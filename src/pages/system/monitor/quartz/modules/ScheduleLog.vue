@@ -4,7 +4,7 @@
 
 <script>
     export default {
-        name: "AddorUpdate"
+        name: "ScheduleLog"
     }
 </script>
 

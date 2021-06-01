@@ -13,7 +13,8 @@
             <a-form :form="form">
 
                 <a-form-item label="角色名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input v-decorator="['roleName', {rules: [{required: true,message: '角色名称不得为空'}]}]"/>
+                    <a-input placeholder="请输入角色名称"
+                             v-decorator="['roleName', {rules: [{required: true,message: '角色名称不得为空'}]}]"/>
                 </a-form-item>
 
                 <a-form-item label="权限" :labelCol="labelCol" :wrapperCol="wrapperCol">

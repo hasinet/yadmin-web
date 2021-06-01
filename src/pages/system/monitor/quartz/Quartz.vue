@@ -35,15 +35,18 @@
         <div>
             <!--头部菜单 start-->
             <a-space class="operator">
-                <a-button icon="form" type="primary">新增</a-button>
-                <a-button icon="delete" type="danger">批量删除</a-button>
+                <a-button icon="form" type="primary" @click="addOrUpdateHandle()">新增</a-button>
+                <a-button icon="delete" type="danger" @click="handleBatchDelete">批量删除</a-button>
                 <a-button icon="forward"
+                          @click="pauseBatchHandle"
                           style=" color: #fff; background-color: #e6a23c; border-color: #e6a23c;">批量暂停
                 </a-button>
                 <a-button icon="pause"
+                          @click="resumeBatchHandle"
                           style=" color: #fff; background-color: #67c23a; border-color: #67c23a;">批量恢复
                 </a-button>
                 <a-button icon="thunderbolt"
+                          @click="runTaskBatchHandle"
                           style=" color: #fff; background-color: #409eff; border-color: #409eff;">批量立即执行
                 </a-button>
                 <a-button icon="file-search"
@@ -63,8 +66,17 @@
                     @selectedRowChange="onSelectChange"
             >
 
+                <div slot="status" slot-scope="{record}">
+                    <a-tag v-if="record.status !== 0">暂停</a-tag>
+                    <a-tag v-else color="#87d068">
+                        正常
+                    </a-tag>
+                </div>
+
+
                 <div slot="action" slot-scope="{text, record}">
                     <a-button
+                            @click="addOrUpdateHandle(record.jobId)"
                             size="small"
                             style="background-color: #108ee9;border-color:#108ee9"
                             icon="edit"
@@ -72,6 +84,7 @@
                     >编辑
                     </a-button>
                     <a-button
+                            @click="handleDelete(record)"
                             type="danger"
                             size="small"
                             icon="delete"
@@ -79,18 +92,25 @@
                     >删除
                     </a-button>
 
-                    <a-button size="small" icon="forward"
-                              style=" color: #fff; background-color: #e6a23c; border-color: #e6a23c;margin-top: 8px;">
+                    <a-button
+                            :loading="pauseButtonLoading"
+                            @click="pauseHandle(record.jobId)"
+                            size="small" icon="forward"
+                            style=" color: #fff; background-color: #e6a23c; border-color: #e6a23c;margin-top: 8px;">
                         暂停
                     </a-button>
 
-                    <a-button size="small" icon="pause"
-                              style=" color: #fff; background-color: #67c23a; border-color: #67c23a;margin-top: 8px;margin-left: 8px">
+                    <a-button
+                            @click="resumeHandle(record.jobId)"
+                            size="small" icon="pause"
+                            style=" color: #fff; background-color: #67c23a; border-color: #67c23a;margin-top: 8px;margin-left: 8px">
                         恢复
                     </a-button>
 
-                    <a-button size="small" icon="thunderbolt"
-                              style=" color: #fff; background-color: #409eff; border-color: #409eff;margin-top: 8px;">
+                    <a-button
+                            @click="runTaskHandle(record.jobId)"
+                            size="small" icon="thunderbolt"
+                            style=" color: #fff; background-color: #409eff; border-color: #409eff;margin-top: 8px;">
                         立即执行
                     </a-button>
                 </div>
@@ -98,22 +118,35 @@
             </standard-table>
         </div>
 
+        <add-or-update
+                @handleSubmit="resetSearch"
+                ref="addOrUpdate">
+        </add-or-update>
 
     </a-card>
 </template>
 
 <script>
+    import AddOrUpdate from "./modules/AddOrUpdate";
     import StandardTable from '@/components/table/StandardTable'
-    import {page, remove} from '@/services/system/monitor/quartz'
+    import {page, remove, runTask, pause, resume} from '@/services/system/monitor/quartz'
 
     export default {
-        components: {StandardTable},
+        components: {StandardTable, AddOrUpdate},
         name: "Quartz",
         data() {
             return {
+                //选中的id
+                ids: [],
+                //搜索加载
                 searchButtonLoading: false,
+                //重置加载
                 resetButtonLoading: false,
+                //初始话加载
                 initLoading: true,
+                //暂停
+                pauseButtonLoading: false,
+                //搜索表单
                 searchFrom: this.$form.createForm(this),
                 selectedRows: [],
                 pagination: {
@@ -121,6 +154,9 @@
                     pageSize: 0,
                     showTotal: total => `共 ${total} 条数据`,
                 },
+                //数据源
+                dataSource: [],
+                //表格
                 columns: [
                     {
                         title: '任务id',
@@ -148,7 +184,7 @@
                     },
                     {
                         title: '状态',
-                        dataIndex: 'status',
+                        scopedSlots: {customRender: 'status'}
                     },
                     {
                         title: '操作',
@@ -186,10 +222,16 @@
                 }).catch(() => {
                 })
             },
+            addOrUpdateHandle(id) {
+                this.$nextTick(() => {
+                    this.$refs.addOrUpdate.init(id)
+                })
+            },
             /**
              * 按钮的loading状态
              * @param type
              * @param status
+             * @returns void
              */
             buttonLoading(type, status) {
                 if (type === "search") {
@@ -200,6 +242,160 @@
                 }
                 this.initLoading = status
             },
+
+            /**
+             * 删除记录
+             */
+            handleDelete(item) {
+                const app = this
+                const modal = this.$confirm({
+                    title: '您确定要删除该记录吗?',
+                    content: '删除后不可恢复',
+                    onOk() {
+                        remove([item['jobId']])
+                            .then((result) => {
+                                app.$message.success(result.data.message, 1.5)
+                                app.resetSearch()
+                            }).catch(() => {
+                            modal.destroy()
+                        })
+                    }
+                })
+            },
+
+            /**
+             *批量删除
+             */
+            handleBatchDelete() {
+                const app = this
+                //判断一下
+                let delIds = app.ids
+                if (delIds.length === 0) {
+                    app.$message.error('请选择需要删除的数据', 1.5)
+                    return
+                }
+                const modal = this.$confirm({
+                    title: '您确定要删除选择的记录吗?',
+                    content: '删除后不可恢复',
+                    onOk() {
+                        remove(delIds)
+                            .then((result) => {
+                                app.$message.success(result.data.message, 1.5)
+                                app.resetSearch()
+                            }).catch(() => {
+                            modal.destroy()
+                        })
+                    }
+                })
+            },
+
+            //单个暂停
+            pauseHandle(id) {
+                const app = this
+                this.$confirm({
+                    title: '请问是否要暂停?',
+                    onOk() {
+                        pause([id]).then((result) => {
+                            app.$message.success(result.data.message, 1.5)
+                            app.resetSearch()
+                        })
+                    }
+                })
+            },
+
+            //批量暂停
+            pauseBatchHandle() {
+                const app = this
+                //判断一下
+                let ids = app.ids
+                if (ids.length === 0) {
+                    app.$message.error('请选择需要暂停的数据', 1.5)
+                    return
+                }
+                this.$confirm({
+                    title: '您确定要暂停选择的记录吗?',
+                    onOk() {
+                        pause(ids).then((result) => {
+                            app.$message.success(result.data.message, 1.5)
+                            app.resetSearch()
+                            app.selectedRows = []
+                        })
+                    }
+                })
+            },
+            //单个恢复
+            resumeHandle(id) {
+                const app = this
+                this.$confirm({
+                    title: '请问是否要恢复?',
+                    onOk() {
+                        resume([id]).then((result) => {
+                            app.$message.success(result.data.message, 1.5)
+                            app.resetSearch()
+                        })
+                    }
+                })
+            },
+            //批量恢复
+            resumeBatchHandle() {
+                const app = this
+                //判断一下
+                let ids = app.ids
+                if (ids.length === 0) {
+                    app.$message.error('请选择需要恢复的数据', 1.5)
+                    return
+                }
+                this.$confirm({
+                    title: '您确定要恢复选择的记录吗?',
+                    onOk() {
+                        resume(ids).then((result) => {
+                            app.$message.success(result.data.message, 1.5)
+                            app.resetSearch()
+                            app.selectedRows = []
+                        })
+                    }
+                })
+            },
+            //单个立即执行
+            runTaskHandle(id) {
+                const app = this
+                this.$confirm({
+                    title: '请问是否要立即执行?',
+                    onOk() {
+                        runTask([id]).then((result) => {
+                            app.$message.success(result.data.message, 1.5)
+                        })
+                    }
+                })
+            },
+            //批量立即执行
+            runTaskBatchHandle() {
+                const app = this
+                //判断一下
+                let ids = app.ids
+                if (ids.length === 0) {
+                    app.$message.error('请选择需要立即执行的数据', 1.5)
+                    return
+                }
+                this.$confirm({
+                    title: '您确定要立即执行选择的记录吗?',
+                    onOk() {
+                        runTask(ids).then((result) => {
+                            app.$message.success(result.data.message, 1.5)
+                            app.resetSearch()
+                            app.selectedRows = []
+                        })
+                    }
+                })
+            },
+            /**
+             * 重置搜索表单
+             */
+            resetSearch() {
+                this.searchFrom.resetFields();
+                this.init("reset")
+            },
+
             /**
              * 分页处理
              * @param selectedRowKeys

@@ -8,41 +8,49 @@
         <a-spin :spinning="confirmLoading">
             <a-form :form="form">
                 <a-form-item label="登录帐号" :labelCol="labelCol" :wrapperCol="wrapperCol">
-                    <a-input v-decorator="['username', {rules: [{required: true, min: 2, message: '请输入至少2个字符'}]}]"/>
+                    <a-input placeholder="请输入登录帐号"
+                             v-decorator="['username', {rules: [{required: true, min: 2, message: '请输入至少2个字符'}]}]"/>
                 </a-form-item>
 
                 <a-form-item label="邮箱" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
+                            placeholder="请输入邮箱"
                             v-decorator="['email', {rules: [{required: true, pattern: /[a-zA-Z0-9_]{1,}[@][a-z0-9]{2,3}[.][a-z]{2,3}/, message: '请输入正确邮箱'}]}]"/>
                 </a-form-item>
 
                 <a-form-item label="手机号" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input
+                            placeholder="请输入手机号"
                             v-decorator="['mobile', {rules: [{required: true, pattern: /^[1][3,4,5,6,7,8,9][0-9]{9}$/, message: '请输入正确手机号'}]}]"/>
                 </a-form-item>
 
-                <a-form-item label="用户密码" :labelCol="labelCol" :wrapperCol="wrapperCol" extra="后台登录密码"
+                <a-form-item label="用户密码" :labelCol="labelCol" :wrapperCol="wrapperCol"
+                             extra="后台登录密码"
                              v-if="formId ===0">
-                    <a-input type="password"
-                             v-decorator="['password', {rules: [{required: true, min: 6, message: '请输入至少6个字符'} ]}]"/>
+                    <a-input placeholder="请输入用户密码" type="password"
+                             v-decorator="['password', {rules: [{required: true, min: 6, message: '密码长度不得小于6位'} ]}]"/>
                 </a-form-item>
-                <a-form-item label="用户密码" :labelCol="labelCol" :wrapperCol="wrapperCol" extra="后台登录密码"
+                <a-form-item label="用户密码" :labelCol="labelCol" :wrapperCol="wrapperCol"
+                             extra="后台登录密码"
                              v-else>
-                    <a-input type="password" v-decorator="['password', {rules: [{ min: 6, message: '请输入至少6个字符'}]}]"/>
+                    <a-input placeholder="请输入用户密码" type="password"
+                             v-decorator="['password', {rules: [{ min: 6, message: '密码长度不得小于6位'}]}]"/>
                 </a-form-item>
 
                 <!--密码设置-->
                 <a-form-item label="确认密码" :labelCol="labelCol" :wrapperCol="wrapperCol"
                              v-if="formId ===0">
                     <a-input
+                            placeholder="请输入用户确认密码"
                             type="password"
-                            v-decorator="['password_confirm', {rules: [{required: true, message: '请输入确认密码'},{validator: compareToFirstPassword} ]}]"/>
+                            v-decorator="['password_confirm', {rules: [{required: true, message: '确认密码不得为空'},{validator: compareToFirstPassword} ]}]"/>
                 </a-form-item>
                 <a-form-item label="确认密码" :labelCol="labelCol" :wrapperCol="wrapperCol"
                              v-else>
                     <a-input
+                            placeholder="请输入用户确认密码"
                             type="password"
-                            v-decorator="['password_confirm', {rules: [{ message: '请输入确认密码'},{validator: compareToFirstPassword}]}]"/>
+                            v-decorator="['password_confirm', {rules: [{ message: '确认密码不得为空'},{validator: compareToFirstPassword}]}]"/>
                 </a-form-item>
 
                 <a-form-item label="角色" :labelCol="labelCol" :wrapperCol="wrapperCol">
@@ -148,11 +156,13 @@
                                 setFieldsValue(data1)
                             })
                             this.confirmLoading = false
-                        }).catch(() => {})
+                        }).catch(() => {
+                        })
                     } else {
                         this.confirmLoading = false
                     }
-                }).catch(() => {})
+                }).catch(() => {
+                })
             },
             /**
              * 确认按钮
@@ -183,7 +193,8 @@
                     this.handleCancel()
                     // 通知父端组件提交完成了
                     this.$emit('handleSubmit', values)
-                }).catch(() => {}).finally(() => {
+                }).catch(() => {
+                }).finally(() => {
                     this.confirmLoading = false
                     this.submitButtonLoading = false
                 })
