@@ -50,6 +50,7 @@
                           style=" color: #fff; background-color: #409eff; border-color: #409eff;">批量立即执行
                 </a-button>
                 <a-button icon="file-search"
+                          @click="logHandle"
                           style=" color: #fff; background-color: #ffba00; border-color: #ffba00;">日志列表
                 </a-button>
             </a-space>
@@ -120,19 +121,24 @@
 
         <add-or-update
                 @handleSubmit="resetSearch"
-                ref="addOrUpdate">
-        </add-or-update>
+                ref="addOrUpdate" />
+
+        <!-- 弹窗, 日志列表 -->
+        <schedule-log
+                ref="scheduleLog"
+        />
 
     </a-card>
 </template>
 
 <script>
     import AddOrUpdate from "./modules/AddOrUpdate";
+    import ScheduleLog from "./modules/ScheduleLog";
     import StandardTable from '@/components/table/StandardTable'
     import {page, remove, runTask, pause, resume} from '@/services/system/monitor/quartz'
 
     export default {
-        components: {StandardTable, AddOrUpdate},
+        components: {StandardTable, AddOrUpdate, ScheduleLog},
         name: "Quartz",
         data() {
             return {
@@ -219,9 +225,22 @@
                     this.pagination.total = data.total
                     this.initLoading = false
                     this.buttonLoading(type, false)
-                }).catch(() => {
                 })
             },
+
+            /**
+             *日志列表
+             */
+            logHandle() {
+                this.$nextTick(() => {
+                    this.$refs.scheduleLog.init()
+                })
+            },
+
+            /**
+             * add or update
+             * @param id
+             */
             addOrUpdateHandle(id) {
                 this.$nextTick(() => {
                     this.$refs.addOrUpdate.init(id)

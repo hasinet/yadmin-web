@@ -126,7 +126,7 @@
                 validateFields((errors, values) => {
                     // 提交到后端api
                     if (errors === null) {
-                        values.jobId = this.formId
+                        values.jobId = this.formIdyar
                         values.status = this.status
                         this.onFormSubmit(values)
                     }
