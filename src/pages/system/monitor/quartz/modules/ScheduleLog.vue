@@ -1,5 +1,6 @@
 <template>
     <a-modal
+            :dialog-style="{ top: '20px' }"
             title="日志列表"
             :visible="visible"
             :width="1000"
@@ -15,11 +16,11 @@
 
 
         <!--查询 start-->
-        <div>
+        <div style="margin-bottom: 100px;">
             <a-form layout="horizontal" :form="searchFrom">
                 <div>
                     <a-row>
-                        <a-col :md="8" :sm="24">
+                        <a-col :md="6" :sm="24">
                             <a-form-item
                                     refs="searchFromRefs"
                                     label="任务ID"
@@ -27,11 +28,53 @@
                                     :wrapperCol="{span: 18, offset: 1}"
                             >
                                 <a-input placeholder="请输入任务ID"
-                                         v-decorator="['logId']"
+                                         v-decorator="['jobId']"
                                 />
                             </a-form-item>
                         </a-col>
-                        <span style="float: right; margin-top: 3px;">
+
+
+                        <a-col :md="7" :sm="24">
+                            <a-form-item
+                                    label="状态"
+                                    :labelCol="{span: 5}"
+
+                            >
+                                <a-select default-value="" style="width: 175px;"
+                                          v-decorator="['status',{  initialValue:'' }]"
+                                >
+                                    <a-select-option value="">
+                                        全部
+                                    </a-select-option>
+                                    <a-select-option value="0">
+                                        正常
+                                    </a-select-option>
+                                    <a-select-option value="1">
+                                        失败
+                                    </a-select-option>
+                                </a-select>
+                            </a-form-item>
+                        </a-col>
+
+                        <a-col :md="10" :sm="24">
+                            <a-form-item
+                                    label="执行时间"
+                                    :labelCol="{span: 5}"
+                                    :wrapperCol="{span: 18}">
+
+                                <a-range-picker
+                                        @change="onChangeDate"
+                                        v-decorator="['createTime']"
+                                        :show-time="{ hideDisabledOptions: true, defaultValue: [moment('00:00:00', 'HH:mm:ss'), moment('11:59:59', 'HH:mm:ss')],}"
+                                        format="YYYY-MM-DD HH:mm:ss"/>
+
+                            </a-form-item>
+                        </a-col>
+
+
+                    </a-row>
+                </div>
+                <span style="float: right; margin-top: 3px;">
                           <a-button icon="search" @click="init('search')" type="primary"
                                     :loading="searchButtonLoading">查询</a-button>
                           <a-button icon="undo"
@@ -39,8 +82,6 @@
                                     :loading="resetButtonLoading"
                                     style="margin-left: 8px">重置</a-button>
                         </span>
-                    </a-row>
-                </div>
             </a-form>
         </div>
 
@@ -71,12 +112,15 @@
 <script>
     import StandardTable from '@/components/table/StandardTable'
     import {logPage} from '@/services/system/monitor/quartz'
+    import moment from 'moment';
 
     export default {
         name: "ScheduleLog",
         components: {StandardTable},
         data() {
             return {
+                //搜索日期
+                createTime: [],
                 //是否弹窗
                 visible: false,
                 // modal(对话框)确定按钮 loading
@@ -142,6 +186,7 @@
             }
         },
         methods: {
+            moment,
             /**
              *数据初始化
              */
@@ -149,9 +194,18 @@
                 this.confirmLoading = true
                 this.visible = true
                 this.buttonLoading(type, true)
-                let logId = this.searchFrom.getFieldValue('logId')
-                let searchParam = [];
-                if (logId) {searchParam = [{column: 'log_id', type: 'eq', value: logId}]}
+                let jobId = this.searchFrom.getFieldValue('jobId')
+                let status = this.searchFrom.getFieldValue('status')
+                let searchParam = [
+                    {column: 'job_id', type: 'eq', value: jobId ? jobId : ""},
+                    {column: 'status', type: 'eq', value: status ? status : ""},
+                    {
+                        column: 'create_time',
+                        type: 'betweenDate',
+                        value: this.createTime.length === 0 ? "" : this.createTime.toString()
+                    }
+                ]
+
                 logPage({
                     currentPage: this.currentPage,
                     fields: searchParam,
@@ -187,6 +241,7 @@
              */
             resetSearch() {
                 this.searchFrom.resetFields();
+                this.createTime = []
                 this.init("reset")
             },
 
@@ -195,8 +250,13 @@
              */
             handleCancel() {
                 this.visible = false
-                this.searchFrom.resetFields();
+                this.searchFrom.resetFields()
                 this.selectedRows = []
+                this.createTime = []
+
+                this.searchButtonLoading = false
+                this.resetButtonLoading = false
+                this.initLoading = true
             },
             /**
              * 分页处理
@@ -212,6 +272,9 @@
              */
             onSelectChange(row) {
                 this.ids = row
+            },
+            onChangeDate(date, dateString) {
+                this.createTime = dateString
             }
         }
     }
