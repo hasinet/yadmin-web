@@ -51,6 +51,13 @@ const routerMap = {
                 component: () => import('@/pages/system/auth/menu')
             },
 
+            system_auth_log: {
+                path: 'log',
+                icon: 'solution',
+                name: '日志',
+                component: () => import('@/pages/system/auth/log')
+            },
+
         system_monitor: {
             path: 'monitor',
             icon: 'eye',

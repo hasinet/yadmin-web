@@ -176,6 +176,12 @@
                                     "icon": 'menu',
                                     "path": 'menu',
                                 },
+                                {
+                                    "router": "system_auth_log",
+                                    "name": '日志',
+                                    "icon": 'solution',
+                                    "path": 'log',
+                                },
                             ]
                         },
                         {
