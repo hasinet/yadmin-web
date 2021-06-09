@@ -3,7 +3,7 @@ import {request} from '@/utils/request'
 const apiPath = {
     page: 'http://127.0.0.1:9995/sys/schedule/page',
     saveAndUpdate: 'http://127.0.0.1:9995/sys/schedule',
-    info: 'http://127.0.0.1:9995/sys/schedule/info/',
+    info: 'http://127.0.0.1:9995/sys/schedule/',
     remove: 'http://127.0.0.1:9995/sys/schedule',
 
     run: 'http://127.0.0.1:9995/sys/schedule/run',

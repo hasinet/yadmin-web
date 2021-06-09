@@ -4,7 +4,7 @@ const apiPath = {
     roleList: 'http://127.0.0.1:9995/sys/role/list',
     page: 'http://127.0.0.1:9995/sys/role/page',
     saveAndUpdate: 'http://127.0.0.1:9995/sys/role',
-    info: 'http://127.0.0.1:9995/sys/role/info/',
+    info: 'http://127.0.0.1:9995/sys/role/',
     remove: 'http://127.0.0.1:9995/sys/role'
 }
 

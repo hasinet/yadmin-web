@@ -4,7 +4,7 @@ import {request, METHOD} from '@/utils/request'
 const apiPath = {
     page: 'http://127.0.0.1:9995/sys/user/page',
     saveAndUpdate: 'http://127.0.0.1:9995/sys/user',
-    info: 'http://127.0.0.1:9995/sys/user/info/',
+    info: 'http://127.0.0.1:9995/sys/user/',
     remove: 'http://127.0.0.1:9995/sys/user'
 }
 
