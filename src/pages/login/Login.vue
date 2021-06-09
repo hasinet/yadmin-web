@@ -74,7 +74,7 @@
 
 <script>
     import CommonLayout from '@/layouts/CommonLayout'
-    import {login, getRoutesConfig} from '@/services/user'
+    import {getRoutesConfig} from '@/services/user'
     import {setAuthorization} from '@/utils/request'
     import {loadRoutes} from '@/utils/routerUtil'
     import {mapMutations} from 'vuex'
@@ -113,24 +113,23 @@
                 this.logging = false
                 const loginRes = res.data
                 if (loginRes.code === 200) {
-                    //这里其实要去要去一次的数据的
-                    const {user, permissions} = loginRes.data
-                    //用户的信息
-                    this.setUser({
-                        "name": "ytrue",
-                        "avatar": "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif?imageView2/1/w/80/h/80",
-                    })
-                    //这个是权限
-                    this.setPermissions([])
-                    //去掉role，这里只要permissions来认证
-                    //this.setRoles([])
                     setAuthorization({token: loginRes.data.accessToken, expireAt: new Date(loginRes.data.expireAt)})
+
                     // 获取路由配置---这里是获得路由
                     getRoutesConfig().then(result => {
-                        // const routesConfig = result.data.data
-                        var routesConfig = routerData();
-                        console.log(routesConfig)
-                        loadRoutes([routesConfig])
+                        let data = result.data.data
+                        //设置基本信息
+                        this.setUser({
+                            "name": data.nickname,
+                            "avatar": data.avatar,
+                        })
+                        //设置权限
+                        this.setPermissions(data.permissions)
+
+                        //设置路由
+                        let routerData = {"router": "root", "children": []}
+                        routerData.children = data.menu
+                        loadRoutes([routerData])
                         this.$router.push('/system/auth')
                         this.$message.success(loginRes.message, 3)
                     })

@@ -1,6 +1,11 @@
 <template>
     <div>
-        <iframe :scrolling="scrolling" :src="urlPath" class="iframe" ref="iframe"></iframe>
+        <iframe
+            :scrolling="scrolling"
+            :src="urlPath"
+            class="iframe"
+            ref="iframe"
+        ></iframe>
     </div>
 </template>
 
@@ -9,7 +14,7 @@
         name: "Application",
         data() {
             return {
-                scrolling:"no",
+                scrolling:"auto",
                 urlPath: 'http://127.0.0.1:9996/wallboard'
             }
         },
