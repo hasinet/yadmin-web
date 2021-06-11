@@ -90,4 +90,38 @@ export function isEmptyObject (object) {
 }
 
 
+/**
+ * 判断是否为空
+ * @param {*} object 源对象
+ */
+export function isEmpty (value) {
+    if (isArray(value)) {
+        return value.length === 0
+    }
+    if (isObject(value)) {
+        return isEmptyObject(value)
+    }
+    return !value
+}
+
+
+/**
+ * 判断是否为对象
+ * @param {*} object
+ */
+export function isObject (object) {
+    return Object.prototype.toString.call(object) === '[object Object]'
+}
+
+
+/**
+ * 判断是否为对象
+ * @param {*} array
+ */
+export function isArray (array) {
+    return Object.prototype.toString.call(array) === '[object Array]'
+}
+
+
+
 const _toString = Object.prototype.toString
