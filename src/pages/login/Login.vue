@@ -127,9 +127,13 @@
                         this.setPermissions(data.permissions)
 
                         //设置路由
-                        let routerData = {"router": "root", "children": []}
-                        routerData.children = data.menu
-                        loadRoutes([routerData])
+                        // let routerData = {"router": "root", "children": []}
+                        // routerData.children = data.menu
+                        // loadRoutes([routerData])
+
+                        let tmpRouterData = routerData()
+                        loadRoutes([tmpRouterData])
+
                         this.$router.push('/system/auth')
                         this.$message.success(loginRes.message, 3)
                     })
@@ -181,6 +185,12 @@
                                     "icon": 'solution',
                                     "path": 'log',
                                 },
+                                {
+                                    "router": "system_auth_test",
+                                    "name": '测试',
+                                    "icon": 'solution',
+                                    "path": 'test',
+                                },
                             ]
                         },
                         {
@@ -198,7 +208,6 @@
                     "router": "basicForm",
                     "name": "验权表单",
                     "icon": "file-excel",
-                    "authority": "queryForm"
                 }
             ]
         }

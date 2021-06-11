@@ -63,4 +63,31 @@ export function treeDataTranslate(data, id = 'id', pid = 'parentId') {
 }
 
 
+// 防抖
+// 首次运行时把定时器赋值给一个变量， 第二次执行时，
+// 如果间隔没超过定时器设定的时间则会清除掉定时器，
+// 重新设定定时器， 依次反复， 当我们停止下来时，
+// 没有执行清除定时器， 超过一定时间后触发回调函数。
+export function debounce (fun, delay) {
+    return function (args) {
+        // 获取函数的作用域和变量
+        const that = this
+        const _args = args
+        // 每次事件被触发，都会清除当前的timeer，然后重写设置超时调用
+        clearTimeout(fun.id)
+        fun.id = setTimeout(function () {
+            fun.call(that, _args)
+        }, delay)
+    }
+}
+
+/**
+ * 判断是否为空对象
+ * @param {*} object 源对象
+ */
+export function isEmptyObject (object) {
+    return Object.keys(object).length === 0
+}
+
+
 const _toString = Object.prototype.toString

@@ -58,6 +58,13 @@ const routerMap = {
                 component: () => import('@/pages/system/auth/log')
             },
 
+            system_auth_test: {
+                path: 'test',
+                icon: 'solution',
+                name: '测试',
+                component: () => import('@/pages/system/auth/test')
+            },
+
         system_monitor: {
             path: 'monitor',
             icon: 'eye',
