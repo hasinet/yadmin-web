@@ -152,7 +152,6 @@ export default {
         this.pagination.total = data.total
         this.initLoading = false
         this.buttonLoading(type, false)
-      }).catch(() => {
       })
     },
     /**

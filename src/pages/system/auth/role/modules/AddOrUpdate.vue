@@ -14,7 +14,7 @@
 
                 <a-form-item label="角色名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input placeholder="请输入角色名称"
-                             v-decorator="['roleName', {rules: [{required: true,message: '角色名称不得为空'}]}]"/>
+                             v-decorator="['roleName']"/>
                 </a-form-item>
 
                 <a-form-item label="权限" :labelCol="labelCol" :wrapperCol="wrapperCol">
@@ -133,10 +133,10 @@
                     if (errors === null) {
                         //这里要判断一下是否填写了权限
                         //allSelectedNodes
-                        if (this.allSelectedNodes.length === 0) {
-                            this.$message.error('请选择权限', 1.5)
-                            return
-                        }
+                        // if (this.allSelectedNodes.length === 0) {
+                        //     this.$message.error('请选择权限', 1.5)
+                        //     return
+                        // }
                         values.roleId = this.formId
                         values.menuIdList = this.allSelectedNodes
                         this.onFormSubmit(values)
@@ -155,7 +155,6 @@
                     this.handleCancel()
                     // 通知父端组件提交完成了
                     this.$emit('handleSubmit', values)
-                }).catch(() => {
                 }).finally(() => {
                     this.confirmLoading = false
                 })

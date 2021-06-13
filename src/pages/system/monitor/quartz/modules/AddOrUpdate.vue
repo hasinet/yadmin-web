@@ -145,7 +145,6 @@
                     this.handleCancel()
                     // 通知父端组件提交完成了
                     this.$emit('handleSubmit', values)
-                }).catch(() => {
                 }).finally(() => {
                     this.confirmLoading = false
                 })

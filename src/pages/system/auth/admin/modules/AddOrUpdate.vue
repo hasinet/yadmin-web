@@ -156,12 +156,10 @@
                                 setFieldsValue(data1)
                             })
                             this.confirmLoading = false
-                        }).catch(() => {
                         })
                     } else {
                         this.confirmLoading = false
                     }
-                }).catch(() => {
                 })
             },
             /**
@@ -193,7 +191,6 @@
                     this.handleCancel()
                     // 通知父端组件提交完成了
                     this.$emit('handleSubmit', values)
-                }).catch(() => {
                 }).finally(() => {
                     this.confirmLoading = false
                     this.submitButtonLoading = false

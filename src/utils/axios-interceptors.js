@@ -23,7 +23,7 @@ const respCommon = {
             data.data.forEach(function (value, index) {
                 msg += parseInt(index + 1) + '. ' + value
             })
-            message.error(h('a', {href: '//www.baidu.com'}, ['百度官网']))
+            message.error(msg)
             return Promise.reject(new Error(msg))
         }
 

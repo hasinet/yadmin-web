@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <a-card>
 
-    <MultiSpec ref="MultiSpec" />
+    <MultiSpec ref="MultiSpec"/>
 
 
     <SelectImage
@@ -10,19 +10,20 @@
         v-decorator="['imagesIds', {rules: [{required: true, message: '请至少上传1张商品图片'}]}]"
     />
 
-  </div>
+  </a-card>
 </template>
 
 <script>
-    import MultiSpec from './modules/MultiSpec'
-    import SelectImage from './modules/SelectImage'
-    export default {
-        name: "Test",
-        components: {
-            MultiSpec,
-          SelectImage
-        },
-    }
+import MultiSpec from './modules/MultiSpec'
+import SelectImage from './modules/SelectImage'
+
+export default {
+  name: "Test",
+  components: {
+    MultiSpec,
+    SelectImage
+  },
+}
 </script>
 
 <style scoped>
