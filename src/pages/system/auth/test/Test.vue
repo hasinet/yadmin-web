@@ -1,7 +1,7 @@
 <template>
   <a-card>
 
-    <MultiSpec ref="MultiSpec"/>
+    <MultiSpec ref="MultiSpecModel"/>
 
 
     <SelectImage
@@ -14,8 +14,8 @@
 </template>
 
 <script>
-import MultiSpec from './modules/MultiSpec'
-import SelectImage from './modules/SelectImage'
+ import MultiSpec from '@/components/sku/MultiSpec'
+import SelectImage from '@/components/image/SelectImage'
 
 export default {
   name: "Test",

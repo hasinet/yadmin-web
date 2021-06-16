@@ -119,8 +119,8 @@
     //import * as UploadApi from '@/api/upload'
 
     import PropTypes from 'ant-design-vue/es/_util/vue-types'
-    import FileTypeEnum from '@/common/enum/file/FileType'
-    import ChannelEnum from '@/common/enum/file/Channel'
+    import FileTypeEnum from '@/enums/file/FileType'
+    import ChannelEnum from '@/enums/file/Channel'
 
     // import AddGroupForm from './AddGroupForm'
     // import MoveGroupForm from './MoveGroupForm'
@@ -205,8 +205,6 @@
                     this.groupList = groupList
                     // 格式化分组列表
                     const groupListTree = this.formatTreeData(groupList)
-
-                    console.log(groupListTree)
 
                     // 记录 groupListTree
                     this.groupListTree = groupListTree
@@ -317,20 +315,23 @@
                 const beforeUploadCount = this.uploading.length
                 // 构建上传参数
                 const formData = new FormData()
-                formData.append('iFile', info.file)
+                formData.append('file', info.file)
                 // 开始上传
-                // UploadApi.image(formData)
-                //     .then(result => {
-                //       setTimeout(() => {
-                //         if (beforeUploadCount === this.uploading.length) {
-                //           this.uploading = []
-                //           this.handleRefresh(true)
-                //         }
-                //       }, 10)
-                //     })
-                //     .catch(() => {
-                //       this.isLoading = false
-                //     })
+                FileApi.upload(formData)
+                    .then(result => {
+
+                        console.log(result)
+
+                        // setTimeout(() => {
+                        //     if (beforeUploadCount === this.uploading.length) {
+                        //         this.uploading = []
+                        //         this.handleRefresh(true)
+                        //     }
+                        // }, 10)
+                    })
+                    .catch(() => {
+                        this.isLoading = false
+                    })
             },
 
             // 列表分页事件
@@ -399,7 +400,7 @@
                 const selectedItems = []
                 for (const key in this.selectedIndexs) {
                     const index = this.selectedIndexs[key]
-                    selectedItems.push(this.fileList.data[index])
+                    selectedItems.push(this.fileList.records[index])
                 }
                 return selectedItems
             },
@@ -410,340 +411,13 @@
                 // 获取选中的文件
                 const selectedItems = this.getSelectedItems()
                 // 通知父端组件提交完成了
+
+
                 this.$emit('handleSubmit', selectedItems)
                 // 关闭对话框
                 this.handleCancel()
             }
 
-        }
-    }
-
-
-    function listData() {
-        return {
-            "list": {
-                "total": 225,
-                "per_page": 15,
-                "current_page": 1,
-                "last_page": 15,
-                "data": [
-                    {
-                        "file_id": 10266,
-                        "group_id": 0,
-                        "channel": 10,
-                        "storage": "qiniu",
-                        "domain": "http://static.yoshop.xany6.com",
-                        "file_type": 10,
-                        "file_name": "白.jpg",
-                        "file_path": "10001/20210313/9d3947cc8b561706d1f0033e14a2048d.jpg",
-                        "file_size": 82343,
-                        "file_ext": "jpg",
-                        "cover": "",
-                        "uploader_id": 0,
-                        "is_recycle": 0,
-                        "is_delete": 0,
-                        "store_id": 10001,
-                        "create_time": "2021-03-01 08:00:00",
-                        "update_time": "2021-03-01 08:00:00",
-                        "preview_url": "http://static.yoshop.xany6.com/10001/20210313/9d3947cc8b561706d1f0033e14a2048d.jpg",
-                        "external_url": "http://static.yoshop.xany6.com/10001/20210313/9d3947cc8b561706d1f0033e14a2048d.jpg"
-                    },
-                    {
-                        "file_id": 10265,
-                        "group_id": 0,
-                        "channel": 10,
-                        "storage": "qiniu",
-                        "domain": "http://static.yoshop.xany6.com",
-                        "file_type": 10,
-                        "file_name": "紫.jpg",
-                        "file_path": "10001/20210313/0927cb5df622721601dc8c582c245b92.jpg",
-                        "file_size": 84540,
-                        "file_ext": "jpg",
-                        "cover": "",
-                        "uploader_id": 0,
-                        "is_recycle": 0,
-                        "is_delete": 0,
-                        "store_id": 10001,
-                        "create_time": "2021-03-01 08:00:00",
-                        "update_time": "2021-03-01 08:00:00",
-                        "preview_url": "http://static.yoshop.xany6.com/10001/20210313/0927cb5df622721601dc8c582c245b92.jpg",
-                        "external_url": "http://static.yoshop.xany6.com/10001/20210313/0927cb5df622721601dc8c582c245b92.jpg"
-                    },
-                    {
-                        "file_id": 10264,
-                        "group_id": 0,
-                        "channel": 10,
-                        "storage": "qiniu",
-                        "domain": "http://static.yoshop.xany6.com",
-                        "file_type": 10,
-                        "file_name": "2.jpg",
-                        "file_path": "10001/20210313/074646782cfec5e7d327148c3fe61dce.jpg",
-                        "file_size": 73521,
-                        "file_ext": "jpg",
-                        "cover": "",
-                        "uploader_id": 0,
-                        "is_recycle": 0,
-                        "is_delete": 0,
-                        "store_id": 10001,
-                        "create_time": "2021-03-01 08:00:00",
-                        "update_time": "2021-03-01 08:00:00",
-                        "preview_url": "http://static.yoshop.xany6.com/10001/20210313/074646782cfec5e7d327148c3fe61dce.jpg",
-                        "external_url": "http://static.yoshop.xany6.com/10001/20210313/074646782cfec5e7d327148c3fe61dce.jpg"
-                    },
-                    {
-                        "file_id": 10263,
-                        "group_id": 0,
-                        "channel": 10,
-                        "storage": "qiniu",
-                        "domain": "http://static.yoshop.xany6.com",
-                        "file_type": 10,
-                        "file_name": "1.jpg",
-                        "file_path": "10001/20210313/b51b4840c24250a67210d59e345e206d.jpg",
-                        "file_size": 90963,
-                        "file_ext": "jpg",
-                        "cover": "",
-                        "uploader_id": 0,
-                        "is_recycle": 0,
-                        "is_delete": 0,
-                        "store_id": 10001,
-                        "create_time": "2021-03-01 08:00:00",
-                        "update_time": "2021-03-01 08:00:00",
-                        "preview_url": "http://static.yoshop.xany6.com/10001/20210313/b51b4840c24250a67210d59e345e206d.jpg",
-                        "external_url": "http://static.yoshop.xany6.com/10001/20210313/b51b4840c24250a67210d59e345e206d.jpg"
-                    },
-                    {
-                        "file_id": 10262,
-                        "group_id": 0,
-                        "channel": 10,
-                        "storage": "qiniu",
-                        "domain": "http://static.yoshop.xany6.com",
-                        "file_type": 10,
-                        "file_name": "3.jpg",
-                        "file_path": "10001/20210313/2632aff97ad54a67f6c905acb1ee78bb.jpg",
-                        "file_size": 30417,
-                        "file_ext": "jpg",
-                        "cover": "",
-                        "uploader_id": 0,
-                        "is_recycle": 0,
-                        "is_delete": 0,
-                        "store_id": 10001,
-                        "create_time": "2021-03-01 08:00:00",
-                        "update_time": "2021-03-01 08:00:00",
-                        "preview_url": "http://static.yoshop.xany6.com/10001/20210313/2632aff97ad54a67f6c905acb1ee78bb.jpg",
-                        "external_url": "http://static.yoshop.xany6.com/10001/20210313/2632aff97ad54a67f6c905acb1ee78bb.jpg"
-                    },
-                    {
-                        "file_id": 10261,
-                        "group_id": 0,
-                        "channel": 10,
-                        "storage": "local",
-                        "domain": "",
-                        "file_type": 10,
-                        "file_name": "头像.jpg",
-                        "file_path": "10001/20210312/dedca73a26589d5e93c08b77969bb43c.jpg",
-                        "file_size": 33006,
-                        "file_ext": "jpg",
-                        "cover": "",
-                        "uploader_id": 0,
-                        "is_recycle": 0,
-                        "is_delete": 0,
-                        "store_id": 10001,
-                        "create_time": "2021-03-01 08:00:00",
-                        "update_time": "2021-03-01 08:00:00",
-                        "preview_url": "https://shop2.yiovo.com/uploads/10001/20210312/dedca73a26589d5e93c08b77969bb43c.jpg",
-                        "external_url": "https://shop2.yiovo.com/uploads/10001/20210312/dedca73a26589d5e93c08b77969bb43c.jpg"
-                    },
-                    {
-                        "file_id": 10259,
-                        "group_id": 0,
-                        "channel": 10,
-                        "storage": "qiniu",
-                        "domain": "http://static.yoshop.xany6.com",
-                        "file_type": 10,
-                        "file_name": "20200608163151489591533.jpg",
-                        "file_path": "20200608163151489591533.jpg",
-                        "file_size": 39657,
-                        "file_ext": "jpg",
-                        "cover": "",
-                        "uploader_id": 0,
-                        "is_recycle": 0,
-                        "is_delete": 0,
-                        "store_id": 10001,
-                        "create_time": "2021-03-01 08:00:00",
-                        "update_time": "2021-03-01 08:00:00",
-                        "preview_url": "http://static.yoshop.xany6.com/20200608163151489591533.jpg",
-                        "external_url": "http://static.yoshop.xany6.com/20200608163151489591533.jpg"
-                    },
-                    {
-                        "file_id": 10256,
-                        "group_id": 0,
-                        "channel": 10,
-                        "storage": "qiniu",
-                        "domain": "http://static.yoshop.xany6.com",
-                        "file_type": 10,
-                        "file_name": "2019071916532778cf84323.jpg",
-                        "file_path": "2019071916532778cf84323.jpg",
-                        "file_size": 14463,
-                        "file_ext": "jpg",
-                        "cover": "",
-                        "uploader_id": 0,
-                        "is_recycle": 0,
-                        "is_delete": 0,
-                        "store_id": 10001,
-                        "create_time": "2021-03-01 08:00:00",
-                        "update_time": "2021-03-01 08:00:00",
-                        "preview_url": "http://static.yoshop.xany6.com/2019071916532778cf84323.jpg",
-                        "external_url": "http://static.yoshop.xany6.com/2019071916532778cf84323.jpg"
-                    },
-                    {
-                        "file_id": 10253,
-                        "group_id": 0,
-                        "channel": 10,
-                        "storage": "qiniu",
-                        "domain": "http://static.yoshop.xany6.com",
-                        "file_type": 10,
-                        "file_name": "20190610153602a29925572.png",
-                        "file_path": "20190610153602a29925572.png",
-                        "file_size": 14612,
-                        "file_ext": "png",
-                        "cover": "",
-                        "uploader_id": 0,
-                        "is_recycle": 0,
-                        "is_delete": 0,
-                        "store_id": 10001,
-                        "create_time": "2021-03-01 08:00:00",
-                        "update_time": "2021-03-01 08:00:00",
-                        "preview_url": "http://static.yoshop.xany6.com/20190610153602a29925572.png",
-                        "external_url": "http://static.yoshop.xany6.com/20190610153602a29925572.png"
-                    },
-                    {
-                        "file_id": 10251,
-                        "group_id": 0,
-                        "channel": 10,
-                        "storage": "qiniu",
-                        "domain": "http://static.yoshop.xany6.com",
-                        "file_type": 10,
-                        "file_name": "201906101521450bca36648.png",
-                        "file_path": "201906101521450bca36648.png",
-                        "file_size": 5435,
-                        "file_ext": "png",
-                        "cover": "",
-                        "uploader_id": 0,
-                        "is_recycle": 0,
-                        "is_delete": 0,
-                        "store_id": 10001,
-                        "create_time": "2021-03-01 08:00:00",
-                        "update_time": "2021-03-01 08:00:00",
-                        "preview_url": "http://static.yoshop.xany6.com/201906101521450bca36648.png",
-                        "external_url": "http://static.yoshop.xany6.com/201906101521450bca36648.png"
-                    },
-                    {
-                        "file_id": 10250,
-                        "group_id": 0,
-                        "channel": 10,
-                        "storage": "qiniu",
-                        "domain": "http://static.yoshop.xany6.com",
-                        "file_type": 10,
-                        "file_name": "201906101521451b0d11430.png",
-                        "file_path": "201906101521451b0d11430.png",
-                        "file_size": 6857,
-                        "file_ext": "png",
-                        "cover": "",
-                        "uploader_id": 0,
-                        "is_recycle": 0,
-                        "is_delete": 0,
-                        "store_id": 10001,
-                        "create_time": "2021-03-01 08:00:00",
-                        "update_time": "2021-03-01 08:00:00",
-                        "preview_url": "http://static.yoshop.xany6.com/201906101521451b0d11430.png",
-                        "external_url": "http://static.yoshop.xany6.com/201906101521451b0d11430.png"
-                    },
-                    {
-                        "file_id": 10249,
-                        "group_id": 0,
-                        "channel": 10,
-                        "storage": "qiniu",
-                        "domain": "http://static.yoshop.xany6.com",
-                        "file_type": 10,
-                        "file_name": "201906101521459f3b11917.png",
-                        "file_path": "201906101521459f3b11917.png",
-                        "file_size": 7341,
-                        "file_ext": "png",
-                        "cover": "",
-                        "uploader_id": 0,
-                        "is_recycle": 0,
-                        "is_delete": 0,
-                        "store_id": 10001,
-                        "create_time": "2021-03-01 08:00:00",
-                        "update_time": "2021-03-01 08:00:00",
-                        "preview_url": "http://static.yoshop.xany6.com/201906101521459f3b11917.png",
-                        "external_url": "http://static.yoshop.xany6.com/201906101521459f3b11917.png"
-                    },
-                    {
-                        "file_id": 10248,
-                        "group_id": 0,
-                        "channel": 10,
-                        "storage": "qiniu",
-                        "domain": "http://static.yoshop.xany6.com",
-                        "file_type": 10,
-                        "file_name": "201906101521454c6306954.png",
-                        "file_path": "201906101521454c6306954.png",
-                        "file_size": 7062,
-                        "file_ext": "png",
-                        "cover": "",
-                        "uploader_id": 0,
-                        "is_recycle": 0,
-                        "is_delete": 0,
-                        "store_id": 10001,
-                        "create_time": "2021-03-01 08:00:00",
-                        "update_time": "2021-03-01 08:00:00",
-                        "preview_url": "http://static.yoshop.xany6.com/201906101521454c6306954.png",
-                        "external_url": "http://static.yoshop.xany6.com/201906101521454c6306954.png"
-                    },
-                    {
-                        "file_id": 10243,
-                        "group_id": 0,
-                        "channel": 10,
-                        "storage": "qiniu",
-                        "domain": "http://static.yoshop.xany6.com",
-                        "file_type": 10,
-                        "file_name": "20190610132154e74bb5921.jpg",
-                        "file_path": "20190610132154e74bb5921.jpg",
-                        "file_size": 88411,
-                        "file_ext": "jpg",
-                        "cover": "",
-                        "uploader_id": 0,
-                        "is_recycle": 0,
-                        "is_delete": 0,
-                        "store_id": 10001,
-                        "create_time": "2021-03-01 08:00:00",
-                        "update_time": "2021-03-01 08:00:00",
-                        "preview_url": "http://static.yoshop.xany6.com/20190610132154e74bb5921.jpg",
-                        "external_url": "http://static.yoshop.xany6.com/20190610132154e74bb5921.jpg"
-                    },
-                    {
-                        "file_id": 10242,
-                        "group_id": 0,
-                        "channel": 10,
-                        "storage": "qiniu",
-                        "domain": "http://static.yoshop.xany6.com",
-                        "file_type": 10,
-                        "file_name": "201906101321536e2883041.jpg",
-                        "file_path": "201906101321536e2883041.jpg",
-                        "file_size": 91419,
-                        "file_ext": "jpg",
-                        "cover": "",
-                        "uploader_id": 0,
-                        "is_recycle": 0,
-                        "is_delete": 0,
-                        "store_id": 10001,
-                        "create_time": "2021-03-01 08:00:00",
-                        "update_time": "2021-03-01 08:00:00",
-                        "preview_url": "http://static.yoshop.xany6.com/201906101321536e2883041.jpg",
-                        "external_url": "http://static.yoshop.xany6.com/201906101321536e2883041.jpg"
-                    }
-                ]
-            }
         }
     }
 </script>

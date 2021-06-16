@@ -12,13 +12,13 @@
       <transition-group type="transition" :name="'flip-list'">
         <div
             v-for="(item, index) in selectedItems"
-            :key="item.file_id"
+            :key="index"
             class="file-item"
             :style="{ width: `${width}px`, height: `${width}px` }"
         >
           <!-- 预览图 -->
-          <a :href="item.preview_url" target="_blank">
-            <div class="img-cover" :style="{backgroundImage: `url('${item.preview_url}')`}"></div>
+          <a :href="item.filePath" target="_blank">
+            <div class="img-cover" :style="{backgroundImage: `url('${item.filePath}')`}"></div>
           </a>
           <!-- 删除文件 -->
           <a-icon
@@ -142,7 +142,7 @@ export default {
         return this.$emit('change', multiple ? [] : 0)
       }
       // 生成fileId
-      const fileId = multiple ? selectedItems.map(item => item.file_id) : selectedItems[0].file_id
+      const fileId = multiple ? selectedItems.map(item => item.fileId) : selectedItems[0].fileId
       // 触发change事件
       return this.$emit('change', fileId, selectedItems)
     }

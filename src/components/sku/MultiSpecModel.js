@@ -78,7 +78,7 @@ const defaultSkuItemData = {
  * 商品 model类
  * GoodsModel
  */
-export default class MultiSpec {
+export default class MultiSpecModel {
     // 商品多规格数据
     multiSpecData = {}
 

@@ -131,8 +131,8 @@
 
 <script>
 import PropTypes from 'ant-design-vue/es/_util/vue-types'
-import MultiSpecModel from "./js/MultiSpec"
-import SelectImage from './SelectImage'
+import MultiSpecModel from "./MultiSpecModel"
+import SelectImage from '@/components/image/SelectImage'
 
 export default {
   components: {
