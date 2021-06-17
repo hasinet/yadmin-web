@@ -132,11 +132,10 @@
 <script>
 import AddOrUpdate from "./modules/AddOrUpdate";
 import ScheduleLog from "./modules/ScheduleLog";
-import StandardTable from '@/components/table/StandardTable'
 import {page, remove, runTask, pause, resume} from '@/services/system/monitor/quartz'
 
 export default {
-  components: {StandardTable, AddOrUpdate, ScheduleLog},
+  components: {AddOrUpdate, ScheduleLog},
   name: "Quartz",
   data() {
     return {

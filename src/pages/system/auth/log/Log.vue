@@ -63,12 +63,11 @@
 
 <script>
 import moment from 'moment'
-import StandardTable from '@/components/table/StandardTable'
+
 import {page} from '@/services/system/auth/log'
 
 
 export default {
-  components: {StandardTable},
   name: "Log",
   data() {
     return {

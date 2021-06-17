@@ -107,13 +107,11 @@
 </template>
 
 <script>
-import StandardTable from '@/components/table/StandardTable'
 import {logPage} from '@/services/system/monitor/quartz'
 import moment from 'moment';
 
 export default {
   name: "ScheduleLog",
-  components: {StandardTable},
   data() {
     return {
       //搜索日期
