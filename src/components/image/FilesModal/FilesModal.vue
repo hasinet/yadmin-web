@@ -103,9 +103,9 @@
             </div>
         </a-spin>
         <!-- 新增分组 -->
-        <!--    <AddGroupForm ref="AddGroupForm" :groupList="groupList" @handleSubmit="getGroupList"/>-->
+        <AddGroupForm ref="AddGroupForm" :groupList="groupList" @handleSubmit="getGroupList"/>
         <!-- 移动分组 -->
-        <!--    <MoveGroupForm ref="MoveGroupForm" :groupList="groupListTree" @handleSubmit="handleRefresh"/>-->
+        <MoveGroupForm ref="MoveGroupForm" :groupList="groupListTree" @handleSubmit="handleRefresh"/>
     </a-modal>
 </template>
 
@@ -115,21 +115,19 @@
     import {treeDataTranslate} from '@/utils/util'
     import * as FileApi from '@/services/mall/file/file'
     import * as GroupApi from '@/services/mall/file/file_group'
-    //import * as GroupApi from '@/api/files/group'
-    //import * as UploadApi from '@/api/upload'
 
     import PropTypes from 'ant-design-vue/es/_util/vue-types'
     import FileTypeEnum from '@/enums/file/FileType'
     import ChannelEnum from '@/enums/file/Channel'
 
-    // import AddGroupForm from './AddGroupForm'
-    // import MoveGroupForm from './MoveGroupForm'
+    import AddGroupForm from './AddGroupForm'
+    import MoveGroupForm from './MoveGroupForm'
 
     export default {
         name: 'FilesModal',
         components: {
-            //AddGroupForm,
-            //MoveGroupForm
+            AddGroupForm,
+            MoveGroupForm
         },
         props: {
             // 多选模式, 如果false为单选
@@ -225,9 +223,21 @@
             // 获取文件列表
             getFileList() {
                 //这个是参数
-                console.log(this.queryParam)
+                //console.log(this.queryParam)
+                //设置查询的数据
+                let fileName = this.queryParam.file_name;
+                let groupType = this.queryParam.group_id === -1 ? 'ne' : 'eq';
+                let searchParam = [
+                    {column: 'file_type', type: 'eq', value: 10},
+                    {column: 'group_id', type: groupType, value: this.queryParam.group_id},
+                    {column: 'file_name', type: 'like', value: fileName ? fileName : ""}
+                ]
                 this.isLoading = true
-                FileApi.page({})
+                FileApi.page({
+                    currentPage: this.queryParam.page,
+                    fields: searchParam,
+                    limit: 15
+                })
                     .then(result => {
                         const {data} = result.data
                         this.fileList = data
@@ -318,16 +328,13 @@
                 formData.append('file', info.file)
                 // 开始上传
                 FileApi.upload(formData)
-                    .then(result => {
-
-                        console.log(result)
-
-                        // setTimeout(() => {
-                        //     if (beforeUploadCount === this.uploading.length) {
-                        //         this.uploading = []
-                        //         this.handleRefresh(true)
-                        //     }
-                        // }, 10)
+                    .then(() => {
+                        setTimeout(() => {
+                            if (beforeUploadCount === this.uploading.length) {
+                                this.uploading = []
+                                this.handleRefresh(true)
+                            }
+                        }, 10)
                     })
                     .catch(() => {
                         this.isLoading = false
@@ -370,13 +377,14 @@
                     title: '您确定要删除该文件吗?',
                     content: '删除后不可恢复，请谨慎操作',
                     onOk() {
-                        // return FileApi.deleted({fileIds})
-                        //     .then(result => {
-                        //       that.$message.success(result.message, 1.5)
-                        //       that.handleRefresh()
-                        //     })
-                        //     .catch(() => true)
-                        //     .finally(result => modal.destroy())
+                        return FileApi.remove(fileIds)
+                            .then(result => {
+                                that.$message.success(result.data.message, 1.5)
+                                that.handleRefresh()
+                            })
+                            .finally(() => {
+                                modal.destroy();
+                            })
                     }
                 })
             },
@@ -392,7 +400,7 @@
             // 获取选中的文件id集
             getSelectedItemIds() {
                 const selectedItems = this.getSelectedItems()
-                return selectedItems.map(item => item.file_id)
+                return selectedItems.map(item => item.fileId)
             },
 
             // 获取选中的文件

@@ -14,3 +14,15 @@ const apiPath = {
 export async function list() {
     return request(apiPath.page, METHOD.POST)
 }
+
+
+/**
+ * 新增或者編輯
+ * @param params
+ * @returns {*}
+ */
+export function saveAndUpdate(params) {
+    let method = params.groupId ? 'put' : 'post'
+    return request(apiPath.saveAndUpdate, method, params)
+}
+

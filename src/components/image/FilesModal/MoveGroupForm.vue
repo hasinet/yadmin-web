@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import * as Api from '@/api/files'
+  import * as Api from '@/services/mall/file/file'
 
 export default {
   props: {
@@ -120,7 +120,7 @@ export default {
       Api.moveGroup({ groupId: this.selectedKeys[0], fileIds: this.filesIds })
         .then(result => {
           // 显示成功
-          this.$message.success(result.message)
+          this.$message.success(result.data.message)
           // 关闭对话框
           this.handleCancel()
           // 通知父端组件提交完成了
