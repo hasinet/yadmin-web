@@ -51,7 +51,7 @@ module.exports = {
       colleague3: '同事丙'
     },
     US: {
-      pageDesc: 'Form pages are used to collect or verify information to users, and basic forms are common in scenarios where there are fewer data items.',
+      pageDesc: 'Form views are used to collect or verify information to users, and basic forms are common in scenarios where there are fewer data items.',
       title: 'Title',
       titleInput: 'Give the target a name',
       date: 'Start and end date',

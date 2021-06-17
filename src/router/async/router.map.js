@@ -9,7 +9,7 @@ const routerMap = {
     login: {
         authority: '*',
         path: '/login',
-        component: () => import('@/pages/login')
+        component: () => import('@/views/login')
     },
     root: {
         path: '/',
@@ -36,33 +36,33 @@ const routerMap = {
                 path: 'admin',
                 icon: 'user',
                 name: '管理员',
-                component: () => import('@/pages/system/auth/admin')
+                component: () => import('@/views/system/auth/admin')
             },
             system_auth_role: {
                 path: 'role',
                 icon: 'team',
                 name: '角色',
-                component: () => import('@/pages/system/auth/role')
+                component: () => import('@/views/system/auth/role')
             },
             system_auth_menu: {
                 path: 'menu',
                 icon: 'menu',
                 name: '菜单',
-                component: () => import('@/pages/system/auth/menu')
+                component: () => import('@/views/system/auth/menu')
             },
 
             system_auth_log: {
                 path: 'log',
                 icon: 'solution',
                 name: '日志',
-                component: () => import('@/pages/system/auth/log')
+                component: () => import('@/views/system/auth/log')
             },
 
             system_auth_test: {
                 path: 'test',
                 icon: 'solution',
                 name: '测试',
-                component: () => import('@/pages/system/auth/test')
+                component: () => import('@/views/system/auth/test')
             },
 
         system_monitor: {
@@ -76,13 +76,13 @@ const routerMap = {
                 path: 'quartz',
                 icon: 'history',
                 name: '定时任务',
-                component: () => import('@/pages/system/monitor/quartz')
+                component: () => import('@/views/system/monitor/quartz')
             },
             system_monitor_application: {
                 path: 'application',
                 icon: 'appstore',
                 name: '应用监控',
-                component: () => import('@/pages/system/monitor/application')
+                component: () => import('@/views/system/monitor/application')
             },
     //系统--------------------------------------------------end
 
@@ -95,7 +95,7 @@ const routerMap = {
     basicForm: {
         path: 'basic',
         name: '基础表单',
-        component: () => import('@/pages/form/basic')
+        component: () => import('@/views/form/basic')
     },
     //结束
 
@@ -104,12 +104,12 @@ const routerMap = {
         authority: '*',
         name: 'exp403',
         path: '403',
-        component: () => import('@/pages/exception/403')
+        component: () => import('@/views/exception/403')
     },
     exp404: {
         name: 'exp404',
         path: '404',
-        component: () => import('@/pages/exception/404')
+        component: () => import('@/views/exception/404')
     }
 }
 export default routerMap
