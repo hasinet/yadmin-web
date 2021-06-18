@@ -35,7 +35,7 @@
 </template>
 
 <script>
-    import * as Api from '@/services/mall/file/file_group'
+    import * as Api from '@/services/system/files/group'
 
     export default {
         props: {

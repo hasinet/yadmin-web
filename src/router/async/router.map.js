@@ -65,6 +65,32 @@ const routerMap = {
                 component: () => import('@/views/system/auth/test')
             },
 
+        system_files: {
+            path: 'files',
+            icon: 'folder',
+            name: '文件库',
+            component: view.blank,
+            redirect: '/system/files/file'
+        },
+            system_files_file: {
+                    path: 'file',
+                    icon: 'file-image',
+                    name: '文件列表',
+                    component: () => import('@/views/system/files/file')
+                },
+            system_files_group: {
+                    path: 'group',
+                    icon: 'folder-open',
+                    name: '文件分组',
+                    component: () => import('@/views/system/files/group')
+                },
+            system_files_setting: {
+                path: 'setting',
+                icon: 'setting',
+                name: '上传设置',
+                component: () => import('@/views/system/files/setting')
+            },
+
         system_monitor: {
             path: 'monitor',
             icon: 'eye',

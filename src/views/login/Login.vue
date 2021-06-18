@@ -194,6 +194,10 @@
                             ]
                         },
                         {
+                            "router": "system_files",
+                            "children": ["system_files_file", "system_files_group","system_files_setting"]
+                        },
+                        {
                             "router": "system_monitor",
                             "children": ["system_monitor_quartz", "system_monitor_application"]
                         }

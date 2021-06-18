@@ -22,7 +22,7 @@
 </template>
 
 <script>
-  import * as Api from '@/services/mall/file/file'
+  import * as Api from '@/services/system/files/file'
 
 export default {
   props: {

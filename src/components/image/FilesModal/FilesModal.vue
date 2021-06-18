@@ -57,7 +57,7 @@
                         <!-- 文件列表 -->
                         <ul v-if="fileList.records && fileList.records.length" class="file-list-ul clearfix">
                             <li
-                                    style="list-style-type:none;"
+
                                     class="file-item"
                                     :class="{ active: selectedIndexs.indexOf(index) > -1 }"
                                     v-for="(item, index) in fileList.records"
@@ -113,8 +113,8 @@
 
     //接口的数据
     import {treeDataTranslate} from '@/utils/util'
-    import * as FileApi from '@/services/mall/file/file'
-    import * as GroupApi from '@/services/mall/file/file_group'
+    import * as FileApi from '@/services/system/files/file'
+    import * as GroupApi from '@/services/system/files/group'
 
     import PropTypes from 'ant-design-vue/es/_util/vue-types'
     import FileTypeEnum from '@/enums/file/FileType'
@@ -516,7 +516,9 @@
                 }
 
                 .file-item {
+                    list-style-type:none;
                     width: 110px;
+
                     position: relative;
                     cursor: pointer;
                     border-radius: 2px;
@@ -592,5 +594,15 @@
                 }
             }
         }
+    }
+
+
+    // 文字超出隐藏(一行)
+    // 需要设置文字容器的宽度
+    .oneline-hide {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        word-break: break-all;
     }
 </style>

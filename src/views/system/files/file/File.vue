@@ -5,18 +5,32 @@
             <a-form layout="horizontal" :form="searchFrom">
                 <div>
                     <a-row>
-                        <a-col :md="6" :sm="24">
+                        <a-col :md="8" :sm="24">
                             <a-form-item
                                     refs="searchFromRefs"
-                                    label="账号名称"
+                                    label="文件名称"
                                     :labelCol="{span: 5}"
                                     :wrapperCol="{span: 18, offset: 1}"
                             >
-                                <a-input placeholder="请输入账号名称"
-                                         v-decorator="['username']"
+                                <a-input placeholder="请输入文件名称"
+                                         v-decorator="['fileName']"
                                 />
                             </a-form-item>
                         </a-col>
+
+                        <a-col :md="8" :sm="24">
+                            <a-form-item
+                                    label="文件分组"
+                                    :labelCol="{span: 5}"
+                                    :wrapperCol="{span: 18, offset: 1}"
+                            >
+                                <a-select placeholder="请选择">
+                                    <a-select-option value="1">关闭</a-select-option>
+                                    <a-select-option value="2">运行中</a-select-option>
+                                </a-select>
+                            </a-form-item>
+                        </a-col>
+
                         <span style="float: right; margin-top: 3px;">
                           <a-button icon="search" @click="init('search')" type="primary"
                                     :loading="searchButtonLoading">查询</a-button>
@@ -39,6 +53,7 @@
                 <a-button icon="delete" type="danger" @click="handleBatchDelete">批量删除</a-button>
             </a-space>
             <!--头部菜单 end-->
+
             <a-table
                     row-key="userId"
                     :columns="columns"
@@ -49,41 +64,45 @@
                     :data-source="dataSource"
                     :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
             >
-             <span slot="status" slot-scope="text, record">
-              <a-tag v-if="record.status === 0">禁用</a-tag>
-              <a-tag v-else color="#87d068">
-                启用
-              </a-tag>
-             </span>>
 
+                <!-- 文件预览 -->
+                <span slot="image" slot-scope="text, record">
+                    <div class="preview-box">
+                      <a :href="record.filePath" target="_blank">
+                        <img :src="text"/>
+                      </a>
+                    </div>
+                 </span>
+
+                <span slot="status" slot-scope="text, record">
+                      <a-tag v-if="record.status === 0">禁用</a-tag>
+                      <a-tag v-else color="#87d068">
+                        启用
+                      </a-tag>
+                 </span>>
                 <span slot="action" slot-scope="text, record">
-              <a-button style="background-color: #108ee9;border-color:#108ee9" icon="edit" type="primary"
-                        size="small" @click="addOrUpdateHandle(record.userId)">编辑
-              </a-button>
-              <a-button size="small" type="danger" icon="delete" style="margin-left: 8px" @click="handleDelete(record)">
-                删除
-              </a-button>
-            </span>
+                      <a-button style="background-color: #108ee9;border-color:#108ee9" icon="edit" type="primary"
+                                size="small" @click="addOrUpdateHandle(record.userId)">编辑
+                      </a-button>
+                      <a-button size="small" type="danger" icon="delete" style="margin-left: 8px"
+                                @click="handleDelete(record)">
+                        删除
+                      </a-button>
+                </span>
             </a-table>
 
         </div>
         <!--表格end-->
 
-        <add-or-update
-                @handleSubmit="resetSearch"
-                ref="addOrUpdate">
-        </add-or-update>
 
     </a-card>
 </template>
 
 <script>
-    import {page, remove} from '@/services/system/auth/admin'
-    import AddOrUpdate from "./modules/AddOrUpdate";
+    import * as FileApi from '@/services/system/files/file'
 
     export default {
-        components: {AddOrUpdate},
-        name: "Admin",
+        name: "File",
         data() {
             return {
                 ids: [],
@@ -99,24 +118,33 @@
                 },
                 columns: [
                     {
-                        title: 'ID',
-                        dataIndex: 'userId',
+                        title: '文件ID',
+                        dataIndex: 'fileId',
                     },
                     {
-                        title: '账号',
-                        dataIndex: 'username',
+                        title: '文件预览',
+                        dataIndex: 'filePath',
+                        scopedSlots: {customRender: 'image'}
                     },
                     {
-                        title: '邮箱',
-                        dataIndex: 'email',
+                        title: '文件名称',
+                        dataIndex: 'fileName',
                     },
                     {
-                        title: '手机号',
-                        dataIndex: 'mobile',
+                        title: '文件类型',
+                        dataIndex: 'fileType',
                     },
                     {
-                        title: '状态',
-                        scopedSlots: {customRender: 'status'}
+                        title: '文件大小',
+                        dataIndex: 'fileSize',
+                    },
+                    {
+                        title: '文件后缀',
+                        dataIndex: 'fileExt',
+                    },
+                    {
+                        title: '上传时间',
+                        dataIndex: 'createTime',
                     },
                     {
                         title: '操作',
@@ -139,11 +167,11 @@
              */
             init(type = "") {
                 this.buttonLoading(type, true)
-                let username = this.searchFrom.getFieldValue('username')
+                let fileName = this.searchFrom.getFieldValue('fileName')
                 let searchParam = [
-                    {column: 'username', type: 'like', value: username ? username : ""}
+                    {column: 'file_name', type: 'like', value: fileName ? fileName : ""}
                 ]
-                page({
+                FileApi.page({
                     currentPage: this.currentPage,
                     fields: searchParam,
                     limit: 5
@@ -154,60 +182,6 @@
                     this.pagination.total = data.total
                     this.initLoading = false
                     this.buttonLoading(type, false)
-                })
-            },
-            /**
-             * 删除记录
-             */
-            handleDelete(item) {
-                const app = this
-                const modal = this.$confirm({
-                    title: '您确定要删除该记录吗?',
-                    content: '删除后不可恢复',
-                    onOk() {
-                        remove([item['userId']])
-                            .then((result) => {
-                                app.$message.success(result.data.message, 1.5)
-                                app.resetSearch()
-                            }).catch(() => {
-                            modal.destroy()
-                        })
-                    }
-                })
-            },
-
-            /**
-             *批量删除
-             */
-            handleBatchDelete() {
-                const app = this
-                //判断一下
-                let delIds = app.ids
-                if (delIds.length === 0) {
-                    app.$message.error('请选择需要删除的数据', 1.5)
-                    return
-                }
-                const modal = this.$confirm({
-                    title: '您确定要删除选择的记录吗?',
-                    content: '删除后不可恢复',
-                    onOk() {
-                        remove(delIds)
-                            .then((result) => {
-                                app.$message.success(result.data.message, 1.5)
-                                app.resetSearch()
-                            }).catch(() => {
-                            modal.destroy()
-                        })
-                    }
-                })
-            },
-
-            /**
-             *新增 - 修改
-             */
-            addOrUpdateHandle(id) {
-                this.$nextTick(() => {
-                    this.$refs.addOrUpdate.init(id)
                 })
             },
             /**
@@ -251,20 +225,18 @@
     }
 </script>
 
-
 <style lang="less" scoped>
-    .fold {
-        width: calc(100% - 216px);
-        display: inline-block
+
+    .preview-box {
+        width: 120px;
+        height: 80px;
+        line-height: 80px;
+
+    img {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
     }
 
-    .operator {
-        margin-bottom: 18px;
-    }
-
-    @media screen and (max-width: 900px) {
-        .fold {
-            width: 100%;
-        }
     }
 </style>
