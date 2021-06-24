@@ -49,6 +49,18 @@
                         key: 'groupId'
                     },
                     {
+                        title: '名称',
+                        dataIndex: 'name',
+                    },
+                    {
+                        title: '排序',
+                        dataIndex: 'sort',
+                    },
+                    {
+                        title: '创建时间',
+                        dataIndex: 'createTime',
+                    },
+                    {
                         title: '操作',
                         scopedSlots: {customRender: 'action'},
                         width: '230px',
@@ -69,7 +81,7 @@
                 GroupApi.list().then(response => {
                     const menuData = response.data.data
                     menuData.forEach(item => {
-                        item.key = item.menuId
+                        item.key = item.groupId
                     })
                     this.tabData = treeDataTranslate(menuData, "groupId", "parentId")
                 })

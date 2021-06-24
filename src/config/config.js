@@ -14,11 +14,12 @@ module.exports = {
   pageWidth: 'fluid',
   multiPage: true,
   cachePage: true,
-  hideSetting: true,
+  hideSetting: false,
   systemName: 'yadmin',
   asyncRoutes: true,
   showPageTitle: true,
   filterMenu: true,
+
   animate: {
     disabled: true
   },
