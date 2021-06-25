@@ -1,5 +1,5 @@
 # 1.简介
-此项目开发中,不稳定, 看看就好....
+此项目开发中, 变化比较大,不稳定, 看看就好....
 
 yadmin 基于springboot 开发后台
 
@@ -25,7 +25,9 @@ yadmin
 │       ├── mall             # 商城模块
 │       ├── chat             # 聊天模块
 │   └── security             # oauth2资源端
-│  
+│
+├── yadmin-db                # 实体类和dao文件
+│
 ├── yadmin-common            # 公共库
 │  
 ├── yadmin-monitor           # spring boot admin

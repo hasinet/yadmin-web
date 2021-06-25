@@ -25,6 +25,24 @@
 
                 </a-form-item>
 
+                <a-form-item label="菜单类型" :labelCol="labelCol" :wrapperCol="wrapperCol">
+                    <a-radio-group v-decorator="['menuType', {initialValue: 0}]" button-style="solid">
+                        <a-radio-button :value="0">
+                            头部菜单
+                        </a-radio-button>
+                        <a-radio-button :value="1">
+                            侧栏菜单
+                        </a-radio-button>
+                        <a-radio-button :value="2">
+                            目录
+                        </a-radio-button>
+                        <a-radio-button :value="3">
+                            按钮
+                        </a-radio-button>
+                    </a-radio-group>
+                    </div>
+                </a-form-item>
+
                 <a-form-item label="名称" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input v-decorator="['name']"/>
                 </a-form-item>
@@ -51,15 +69,15 @@
 
                 <a-form-item label="是否显示" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-radio-group
-                            v-decorator="['hidden', {initialValue: 1}]">
-                        <a-radio :value="1">显示</a-radio>
-                        <a-radio :value="0">隐藏</a-radio>
+                            v-decorator="['hidden', {initialValue: true}]">
+                        <a-radio :value="true">显示</a-radio>
+                        <a-radio :value="false">隐藏</a-radio>
                     </a-radio-group>
                 </a-form-item>
 
                 <a-form-item label="排序" :labelCol="labelCol" :wrapperCol="wrapperCol">
                     <a-input-number :min="0"
-                                    v-decorator="['orderNumber',{initialValue: 0,rules: [{required: true,message: '排序不得为空'}]}]"/>
+                                    v-decorator="['orderNum',{initialValue: 0,rules: [{required: true,message: '排序不得为空'}]}]"/>
                 </a-form-item>
 
             </a-form>
@@ -69,7 +87,8 @@
 </template>
 
 <script>
-    import {list, saveAndUpdate} from '@/services/system/auth/menu'
+    import _ from "lodash";
+    import {list, saveAndUpdate, info} from '@/services/system/auth/menu'
     import {treeDataTranslate} from '@/utils/util'
 
     export default {
@@ -113,30 +132,57 @@
         methods: {
             init(id) {
                 this.visible = true
-                this.confirmLoading = false
+                this.formId = id || 0
                 list().then(response => {
                     const menuData = response.data.data
                     this.treeData = treeDataTranslate(menuData, "menuId", "parentId")
-
                     //头部插入
                     this.treeData.unshift({
                         "menuId": 0,
                         "name": "无上级菜单",
                     });
                     this.value = 0
+                }).then(() => {
+                    if (this.formId) {
+                        info(this.formId).then(({data}) => {
+                            //处理数据
+                            //设置值
+                            const data1 = _.pick(data.data, [
+                                'name',
+                                'router',
+                                'path',
+                                'redirect',
+                                'perms',
+                                'icon',
+                                'orderNum',
+                                'hidden',
+                                'menuType'
+                            ])
+                            this.value = data.data.parentId
+                            const {form: {setFieldsValue}} = this
+                            this.$nextTick(() => {
+                                setFieldsValue(data1)
+                            })
+                            this.confirmLoading = false
+                        })
+                    } else {
+                        this.confirmLoading = false
+                    }
                 })
             },
             /**
              * 确认按钮
              */
             handleSubmit(e) {
-                // if (this.confirmLoading === true) return
                 e.preventDefault()
                 const {form: {validateFields}} = this
                 // 表单验证
                 validateFields((errors, values) => {
                     // 提交到后端api
                     if (errors === null) {
+                        //获得上级id
+                        values.parentId = this.value
+                        values.menuId = this.formId
                         this.onFormSubmit(values)
                     }
                 })
@@ -160,7 +206,7 @@
                     setTimeout(function () {
                         console.log(e)
                         that.confirmLoading = false
-                    },200)
+                    }, 200)
                 })
             },
 
