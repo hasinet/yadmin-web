@@ -54,7 +54,7 @@ const routerMap = {
             system_auth_log: {
                 path: 'log',
                 icon: 'solution',
-                name: '日志',
+                name: '操作日志',
                 component: () => import('@/views/system/auth/log')
             },
 

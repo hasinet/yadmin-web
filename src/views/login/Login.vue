@@ -127,12 +127,18 @@
                         this.setPermissions(data.permissions)
 
                         //设置路由
-                        // let routerData = {"router": "root", "children": []}
-                        // routerData.children = data.menu
-                        // loadRoutes([routerData])
+                        let routerData = {"router": "root", "children": []}
+                        routerData.children = data.menu
 
-                        let tmpRouterData = routerData()
-                        loadRoutes([tmpRouterData])
+
+                        console.log(routerData);
+
+                        loadRoutes([routerData])
+
+
+
+                        // let tmpRouterData = routerData()
+                        // loadRoutes([tmpRouterData])
 
                         this.$router.push('/system/auth')
                         this.$message.success(loginRes.message, 3)

@@ -48,10 +48,12 @@
         <!--表格 start-->
         <div>
             <!--头部菜单 start-->
-            <a-space class="operator">
-                <a-button icon="form" type="primary" @click="addOrUpdateHandle()">新增</a-button>
-                <a-button icon="delete" type="danger" @click="handleBatchDelete">批量删除</a-button>
-            </a-space>
+            <div style="margin-bottom: 18px;">
+                <a-space class="operator">
+                    <a-button icon="form" type="primary" @click="addOrUpdateHandle()">新增</a-button>
+                    <a-button icon="delete" type="danger" @click="handleBatchDelete">批量删除</a-button>
+                </a-space>
+            </div>
             <!--头部菜单 end-->
 
             <a-table
@@ -232,11 +234,11 @@
         height: 80px;
         line-height: 80px;
 
-    img {
-        display: block;
-        max-width: 100%;
-        max-height: 100%;
-    }
+        img {
+            display: block;
+            max-width: 100%;
+            max-height: 100%;
+        }
 
     }
 </style>
