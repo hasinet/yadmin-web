@@ -98,10 +98,10 @@
                     showTotal: total => `共 ${total} 条数据`,
                 },
                 columns: [
-                    {
-                        title: 'ID',
-                        dataIndex: 'userId',
-                    },
+                    // {
+                    //     title: 'ID',
+                    //     dataIndex: 'userId',
+                    // },
                     {
                         title: '账号',
                         dataIndex: 'username',

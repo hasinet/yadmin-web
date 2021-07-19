@@ -4,24 +4,35 @@
         <div style="margin-bottom: 18px;">
             <a-space class="operator">
                 <a-button icon="form" type="primary" @click="addOrUpdateHandle()">新增</a-button>
-                <a-button icon="delete" type="danger" @click="handleBatchDelete">批量删除</a-button>
+                <!--                <a-button icon="delete" type="danger" @click="handleBatchDelete">批量删除</a-button>-->
             </a-space>
         </div>
 
         <div>
+            <!-- :row-selection="{selectedRowKeys: selectedRowKeys, onSelectAll: onSelectAll, onSelect: onSelect}"-->
             <a-table
                     :columns="columns"
                     :data-source="tabData"
                     :customRow="tableClick"
                     :pagination="false"
                     expandRowByClick
-                    :row-selection="{selectedRowKeys: selectedRowKeys, onSelectAll: onSelectAll, onSelect: onSelect}"
             >
-                <div slot="action" slot-scope="{text, record}">
-                    <a-button size="small" style="background-color: #108ee9;border-color:#108ee9" icon="edit"
-                              type="primary">编辑
+                <div slot="action" slot-scope="text, record">
+                    <a-button
+                            @click.stop.prevent="addOrUpdateHandle(record.groupId)"
+                            size="small"
+                            style="background-color: #108ee9;border-color:#108ee9"
+                            icon="edit"
+                            type="primary">编辑
                     </a-button>
-                    <a-button size="small" type="danger" icon="delete" style="margin-left: 8px">删除</a-button>
+                    <a-button
+                            @click.stop.prevent="handleDelete(record)"
+                            size="small"
+                            type="danger"
+                            icon="delete"
+                            style="margin-left: 8px"
+                    >删除
+                    </a-button>
                 </div>
             </a-table>
         </div>
@@ -37,17 +48,20 @@
 <script>
     import {treeDataTranslate} from '@/utils/util'
     import * as GroupApi from '@/services/system/files/group'
+    import AddOrUpdate from "./modules/AddOrUpdate";
+
     export default {
         name: "Group",
+        components: {AddOrUpdate},
         data() {
             return {
                 //表格字段
                 columns: [
-                    {
-                        title: 'id',
-                        dataIndex: 'groupId',
-                        key: 'groupId'
-                    },
+                    // {
+                    //     title: 'id',
+                    //     dataIndex: 'groupId',
+                    //     key: 'groupId'
+                    // },
                     {
                         title: '名称',
                         dataIndex: 'name',
@@ -95,12 +109,24 @@
                 })
             },
             /**
-             *批量删除
+             * 删除记录
              */
-            handleBatchDelete() {
-
+            handleDelete(item) {
+                const app = this
+                const modal = this.$confirm({
+                    title: '您确定要删除该记录吗?',
+                    content: '删除后不可恢复',
+                    onOk() {
+                        GroupApi.remove([item['groupId']])
+                            .then((result) => {
+                                app.$message.success(result.data.message, 1.5)
+                                app.init("reset")
+                            }).catch(() => {
+                            modal.destroy()
+                        })
+                    }
+                })
             },
-
             onSelectAll(selected) {
                 if (selected) {
                     const tabData = this.tabData;

@@ -63,7 +63,6 @@
                 confirmLoading: false,
                 // 当前表单元素
                 form: this.$form.createForm(this),
-
                 // 上级分组列表
                 groupListTree: []
             }

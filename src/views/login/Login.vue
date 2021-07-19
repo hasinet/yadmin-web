@@ -129,16 +129,10 @@
                         //设置路由
                         let routerData = {"router": "root", "children": []}
                         routerData.children = data.menu
-
-
-                        console.log(routerData);
-
                         loadRoutes([routerData])
 
-
-
-                        // let tmpRouterData = routerData()
-                        // loadRoutes([tmpRouterData])
+                        //let tmpRouterData = routerData()
+                        //loadRoutes([tmpRouterData])
 
                         this.$router.push('/system/auth')
                         this.$message.success(loginRes.message, 3)

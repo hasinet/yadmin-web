@@ -50,7 +50,7 @@
             <!--头部菜单 start-->
             <div style="margin-bottom: 18px;">
                 <a-space class="operator">
-                    <a-button icon="form" type="primary" @click="addOrUpdateHandle()">新增</a-button>
+                    <a-button icon="cloud-upload" type="primary" @click="addOrUpdateHandle()">上传</a-button>
                     <a-button icon="delete" type="danger" @click="handleBatchDelete">批量删除</a-button>
                 </a-space>
             </div>
@@ -119,10 +119,10 @@
                     showTotal: total => `共 ${total} 条数据`,
                 },
                 columns: [
-                    {
-                        title: '文件ID',
-                        dataIndex: 'fileId',
-                    },
+                    // {
+                    //     title: '文件ID',
+                    //     dataIndex: 'fileId',
+                    // },
                     {
                         title: '文件预览',
                         dataIndex: 'filePath',

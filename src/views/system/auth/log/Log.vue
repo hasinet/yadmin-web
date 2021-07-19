@@ -100,7 +100,7 @@ export default {
         },
         {
           title: '操作方法',
-          dataIndex: 'operation',
+          dataIndex: 'actionMethod',
           width:'150px'
         },
         {
@@ -144,7 +144,7 @@ export default {
       let username = this.searchFrom.getFieldValue('username')
       let searchParam = [
         {column: 'username', type: 'like', value: username ? username : ""},
-        {column: 'create_date', type: 'betweenDate', value: this.createTime.length === 0 ? "" : this.createTime.toString()}
+        {column: 'start_time', type: 'betweenDate', value: this.createTime.length === 0 ? "" : this.createTime.toString()}
       ]
 
       page({

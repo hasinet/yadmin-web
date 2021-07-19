@@ -10,7 +10,7 @@
 
         <div>
 
-            <!--            :row-selection="{selectedRowKeys: selectedRowKeys, onSelectAll: onSelectAll, onSelect: onSelect}"-->
+            <!--:row-selection="{selectedRowKeys: selectedRowKeys, onSelectAll: onSelectAll, onSelect: onSelect}"-->
             <a-table
                     :loading="initLoading"
                     :columns="columns"
@@ -31,7 +31,7 @@
                               type="primary">编辑
                     </a-button>
                     <a-button
-                            @click="handleDelete(record)"
+                            @click.stop.prevent="handleDelete(record)"
                             size="small"
                             type="danger"
                             icon="delete"
@@ -62,11 +62,11 @@
                 ids: [],
                 //表格字段
                 columns: [
-                    {
-                        title: 'id',
-                        dataIndex: 'menuId',
-                        key: 'menuId'
-                    },
+                    // {
+                    //     title: 'id',
+                    //     dataIndex: 'menuId',
+                    //     key: 'menuId'
+                    // },
                     {
                         title: '名称',
                         dataIndex: 'name',
