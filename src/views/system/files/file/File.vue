@@ -50,14 +50,29 @@
             <!--头部菜单 start-->
             <div style="margin-bottom: 18px;">
                 <a-space class="operator">
-                    <a-button icon="cloud-upload" type="primary" @click="addOrUpdateHandle()">上传</a-button>
+
+                    <a-upload
+                            name="iFile"
+                            accept="image/*"
+                            :beforeUpload="beforeUpload"
+                            :customRequest="onUpload"
+                            :multiple="true"
+                            :showUploadList="false"
+                    >
+                        <a-button
+                                :loading="uploadButtonLoading"
+                                icon="cloud-upload"
+                                type="primary">上传
+                        </a-button>
+                    </a-upload>
+
                     <a-button icon="delete" type="danger" @click="handleBatchDelete">批量删除</a-button>
                 </a-space>
             </div>
             <!--头部菜单 end-->
 
             <a-table
-                    row-key="userId"
+                    row-key="fileId"
                     :columns="columns"
                     :dataSource="dataSource"
                     :pagination="pagination"
@@ -84,7 +99,7 @@
                  </span>>
                 <span slot="action" slot-scope="text, record">
                       <a-button style="background-color: #108ee9;border-color:#108ee9" icon="edit" type="primary"
-                                size="small" @click="addOrUpdateHandle(record.userId)">编辑
+                                size="small" @click="addOrUpdateHandle(record.fileId)">编辑
                       </a-button>
                       <a-button size="small" type="danger" icon="delete" style="margin-left: 8px"
                                 @click="handleDelete(record)">
@@ -95,6 +110,10 @@
 
         </div>
         <!--表格end-->
+        <update
+                @handleSubmit="resetSearch"
+                ref="update">
+        </update>
 
 
     </a-card>
@@ -102,8 +121,10 @@
 
 <script>
     import * as FileApi from '@/services/system/files/file'
+    import Update from "./modules/Update";
 
     export default {
+        components: {Update},
         name: "File",
         data() {
             return {
@@ -111,6 +132,7 @@
                 visible: true,
                 searchButtonLoading: false,
                 resetButtonLoading: false,
+                uploadButtonLoading: false,
                 initLoading: true,
                 searchFrom: this.$form.createForm(this),
                 pagination: {
@@ -157,7 +179,10 @@
                 ],
                 dataSource: [],
                 selectedRowKeys: [],
-                currentPage: 1
+                currentPage: 1,
+                //文件上传
+                // 上传中的文件
+                uploading: []
             }
         },
         mounted() {
@@ -186,6 +211,100 @@
                     this.buttonLoading(type, false)
                 })
             },
+            /**
+             *新增 - 修改
+             */
+            addOrUpdateHandle(id) {
+                this.$nextTick(() => {
+                    this.$refs.update.init(id)
+                })
+            },
+            /**
+             * 删除记录
+             */
+            handleDelete(item) {
+                const app = this
+                const modal = this.$confirm({
+                    title: '您确定要删除该记录吗?',
+                    content: '删除后不可恢复',
+                    onOk() {
+                        FileApi.remove([item['fileId']])
+                            .then((result) => {
+                                app.$message.success(result.data.message, 1.5)
+                                app.resetSearch()
+                            }).catch(() => {
+                            modal.destroy()
+                        })
+                    }
+                })
+            },
+
+            /**
+             *批量删除
+             */
+            handleBatchDelete() {
+                const app = this
+                //判断一下
+                let delIds = app.ids
+                if (delIds.length === 0) {
+                    app.$message.error('请选择需要删除的数据', 1.5)
+                    return
+                }
+                const modal = this.$confirm({
+                    title: '您确定要删除选择的记录吗?',
+                    content: '删除后不可恢复',
+                    onOk() {
+                        FileApi.remove(delIds)
+                            .then((result) => {
+                                app.$message.success(result.data.message, 1.5)
+                                app.resetSearch()
+                            }).catch(() => {
+                            modal.destroy()
+                        })
+                    }
+                })
+            },
+
+            // 事件: 上传文件之前
+            beforeUpload(file, fileList) {
+                const isLt1M = file.size / 1024 / 1024 < 1
+                if (!isLt1M) {
+                    this.$message.error('文件大小不能超出1MB')
+                    return false
+                }
+                return true
+            },
+            /**
+             * 事件: 自定义上传事件
+             */
+            onUpload(info) {
+                this.uploadButtonLoading = true
+                this.initLoading = true
+                // 记录上传状态
+                this.uploading.push(true)
+                const beforeUploadCount = this.uploading.length
+                // 构建上传参数
+                const formData = new FormData()
+                formData.append('file', info.file)
+                // 开始上传
+                FileApi.upload(formData)
+                    .then(() => {
+                        setTimeout(() => {
+                            if (beforeUploadCount === this.uploading.length) {
+                                this.uploading = []
+                                this.uploadButtonLoading = false
+                                this.initLoading = false
+                                this.init()
+                            }
+                        }, 10)
+
+                    })
+                    .catch(() => {
+                        this.uploadButtonLoading = false
+                        this.initLoading = false
+                    })
+            },
+
             /**
              * 重置搜索表单
              */

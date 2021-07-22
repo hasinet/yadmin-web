@@ -2,11 +2,12 @@ import {request, METHOD} from '@/utils/request'
 
 
 const apiPath = {
+    info: 'http://127.0.0.1:9995/file/',
     page: 'http://127.0.0.1:9995/file/page',
     upload: 'http://127.0.0.1:9995/file/upload',
-    saveAndUpdate: 'http://127.0.0.1:9995/file',
     moveGroup: 'http://127.0.0.1:9995/file/move',
     remove: 'http://127.0.0.1:9995/file',
+    update: 'http://127.0.0.1:9995/file'
 }
 
 
@@ -46,3 +47,24 @@ export function moveGroup(params) {
 export function remove(data) {
     return request(apiPath.remove, 'delete', data)
 }
+
+
+/**
+ * 編輯
+ * @param params
+ * @returns {*}
+ */
+export function update(params) {
+    return request(apiPath.update, 'put', params)
+}
+
+
+/**
+ * 获得信息
+ * @param id
+ * @returns {*}
+ */
+export function info(id) {
+    return request(apiPath.info + id, 'get')
+}
+
