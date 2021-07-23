@@ -104,7 +104,7 @@
 
 <script>
     import _ from "lodash";
-    import {saveAndUpdate, getUserById} from '@/services/system/auth/admin'
+    import {saveAndUpdate, info} from '@/services/system/auth/admin'
     import {roleList} from '@/services/system/auth/role'
 
     export default {
@@ -148,7 +148,7 @@
                     this.roleList = data.data
                 }).then(() => {
                     if (this.formId) {
-                        getUserById(this.formId).then(({data}) => {
+                        info(this.formId).then(({data}) => {
                             //设置值
                             const data1 = _.pick(data.data, ['username', 'mobile', 'email', 'status', 'roleIdList'])
                             const {form: {setFieldsValue}} = this

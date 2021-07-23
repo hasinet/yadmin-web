@@ -1,6 +1,5 @@
 import axios from 'axios'
 import Cookie from 'js-cookie'
-import {message} from 'ant-design-vue';
 
 // 跨域认证信息 header 名
 const xsrfHeaderName = 'Authorization'
@@ -9,6 +8,8 @@ axios.defaults.timeout = 5000
 axios.defaults.withCredentials = true
 axios.defaults.xsrfHeaderName = xsrfHeaderName
 axios.defaults.xsrfCookieName = xsrfHeaderName
+
+const BASE_URL = process.env.VUE_APP_API_BASE_URL
 
 // 认证类型
 const AUTH_TYPE = {
@@ -21,7 +22,9 @@ const AUTH_TYPE = {
 // http method
 const METHOD = {
     GET: 'get',
-    POST: 'post'
+    POST: 'post',
+    PUT: 'put',
+    DELETE: 'delete',
 }
 
 /**
@@ -33,8 +36,11 @@ const METHOD = {
  * @returns {Promise<AxiosResponse<T>>}
  */
 async function request(url, method, params, setting) {
+    if (!isUrl(url)) {
+        url = BASE_URL + url;
+    }
     //返回
-    if (method === 'get') {
+    if (method === METHOD.GET) {
         url.indexOf('?') === -1 ? url = url + '?_=' + (new Date().getTime()) : url = url + '&_=' + (new Date().getTime())
     }
     return axios({
@@ -44,6 +50,18 @@ async function request(url, method, params, setting) {
         headers: setting
     })
 }
+
+
+/**
+ * 判断是否是url
+ * @param str
+ * @return {boolean}
+ */
+function isUrl(str) {
+    var v = new RegExp('^(?!mailto:)(?:(?:http|https|ftp)://|//)(?:\\S+(?::\\S*)?@)?(?:(?:(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[0-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))|(?:(?:[a-z\\u00a1-\\uffff0-9]+-?)*[a-z\\u00a1-\\uffff0-9]+)(?:\\.(?:[a-z\\u00a1-\\uffff0-9]+-?)*[a-z\\u00a1-\\uffff0-9]+)*(?:\\.(?:[a-z\\u00a1-\\uffff]{2,})))|localhost)(?::\\d{2,5})?(?:(/|\\?|#)[^\\s]*)?$', 'i');
+    return v.test(str);
+}
+
 
 /**
  * 设置认证信息

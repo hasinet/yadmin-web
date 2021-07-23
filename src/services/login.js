@@ -1,9 +1,9 @@
-import {request, METHOD,setAuthorization} from '@/utils/request'
+import {METHOD, request} from '@/utils/request'
 import qs from 'qs'
 import Cookie from 'js-cookie'
 
 const apiPath = {
-    login: 'http://127.0.0.1:9995/oauth/token',
+    login: '/oauth/token',
     logout: ''
 }
 
@@ -27,6 +27,12 @@ export async function login1(username, password) {
 }
 
 
+/**
+ * base64
+ * @param username
+ * @param password
+ * @return {string}
+ */
 function makeBaseAuth(username, password) {
     let token = username + ':' + password
     let Base64 = require('js-base64').Base64

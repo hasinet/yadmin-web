@@ -1,8 +1,6 @@
 import {request, METHOD} from '@/utils/request'
 
-const apiPath = {
-    page: 'http://127.0.0.1:9995/sys/log/page',
-}
+const apiPath = '/sys/log';
 
 
 /**
@@ -11,5 +9,5 @@ const apiPath = {
  * @return {Promise<*>}
  */
 export async function page(data) {
-    return request(apiPath.page, METHOD.POST, data)
+    return request(`${apiPath}/page`, METHOD.POST, data)
 }

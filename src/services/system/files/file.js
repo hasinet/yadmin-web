@@ -1,22 +1,13 @@
 import {request, METHOD} from '@/utils/request'
 
-
-const apiPath = {
-    info: 'http://127.0.0.1:9995/file/',
-    page: 'http://127.0.0.1:9995/file/page',
-    upload: 'http://127.0.0.1:9995/file/upload',
-    moveGroup: 'http://127.0.0.1:9995/file/move',
-    remove: 'http://127.0.0.1:9995/file',
-    update: 'http://127.0.0.1:9995/file'
-}
-
+const apiPath = '/files/file'
 
 /**
  * 获得列表数据
  * @returns {Promise<*>}
  */
 export async function page(data) {
-    return request(apiPath.page, METHOD.POST, data)
+    return request(`${apiPath}/page`, METHOD.POST, data)
 }
 
 
@@ -28,7 +19,7 @@ export async function page(data) {
 export async function upload(file) {
 
     let config = {headers: {'Content-Type': 'multipart/form-data'}}
-    return request(apiPath.upload, METHOD.POST, file, config)
+    return request(`${apiPath}/upload`, METHOD.POST, file, config)
 }
 
 /**
@@ -36,7 +27,7 @@ export async function upload(file) {
  * @param params
  */
 export function moveGroup(params) {
-    return request(apiPath.moveGroup, METHOD.POST, params)
+    return request(`${apiPath}/move`, METHOD.POST, params)
 }
 
 /**
@@ -45,7 +36,7 @@ export function moveGroup(params) {
  * @returns {*}
  */
 export function remove(data) {
-    return request(apiPath.remove, 'delete', data)
+    return request(apiPath, METHOD.DELETE, data)
 }
 
 
@@ -55,7 +46,7 @@ export function remove(data) {
  * @returns {*}
  */
 export function update(params) {
-    return request(apiPath.update, 'put', params)
+    return request(apiPath, METHOD.PUT, params)
 }
 
 
@@ -65,6 +56,6 @@ export function update(params) {
  * @returns {*}
  */
 export function info(id) {
-    return request(apiPath.info + id, 'get')
+    return request(`${apiPath}/${id}/info`, METHOD.GET)
 }
 

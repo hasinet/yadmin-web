@@ -1,20 +1,13 @@
-import {request} from '@/utils/request'
+import {request, METHOD} from '@/utils/request'
 
-const apiPath = {
-    table: 'http://127.0.0.1:9995/sys/menu/table',
-    list: 'http://127.0.0.1:9995/sys/menu/list',
-    saveAndUpdate: 'http://127.0.0.1:9995/sys/menu',
-    info: 'http://127.0.0.1:9995/sys/menu/',
-    remove: 'http://127.0.0.1:9995/sys/menu',
-}
-
+const apiPath = '/sys/menu'
 
 /**
  * 菜单全部列表
  * @returns {*}
  */
 export function table() {
-    return request(apiPath.table, 'get')
+    return request(`${apiPath}/table`, METHOD.GET)
 }
 
 
@@ -23,7 +16,7 @@ export function table() {
  * @returns {*}
  */
 export function list() {
-    return request(apiPath.list, 'get')
+    return request(`${apiPath}/list`, METHOD.GET)
 }
 
 /**
@@ -32,7 +25,7 @@ export function list() {
  * @returns {*}
  */
 export function info(id) {
-    return request(apiPath.info + id, 'get')
+    return request(`${apiPath}/${id}/info`, METHOD.GET)
 }
 
 
@@ -42,8 +35,8 @@ export function info(id) {
  * @returns {*}
  */
 export function saveAndUpdate(params) {
-    let method = params.menuId ? 'put' : 'post'
-    return request(apiPath.saveAndUpdate, method, params)
+    let method = params.menuId ? METHOD.PUT : METHOD.POST
+    return request(apiPath, method, params)
 }
 
 
@@ -53,5 +46,5 @@ export function saveAndUpdate(params) {
  * @returns {*}
  */
 export function remove(data) {
-    return request(apiPath.remove, 'delete', data)
+    return request(apiPath, METHOD.DELETE, data)
 }

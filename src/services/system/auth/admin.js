@@ -1,19 +1,14 @@
 import {request, METHOD} from '@/utils/request'
 
 
-const apiPath = {
-    page: 'http://127.0.0.1:9995/sys/user/page',
-    saveAndUpdate: 'http://127.0.0.1:9995/sys/user',
-    info: 'http://127.0.0.1:9995/sys/user/',
-    remove: 'http://127.0.0.1:9995/sys/user'
-}
+const apiPath = '/sys/user'
 
 /**
  * 获得列表数据
  * @returns {Promise<*>}
  */
 export async function page(data) {
-    return request(apiPath.page, METHOD.POST, data)
+    return request(`${apiPath}/page`, METHOD.POST, data)
 }
 
 
@@ -23,8 +18,8 @@ export async function page(data) {
  * @returns {*}
  */
 export function saveAndUpdate(params) {
-    let method = params.userId ? 'put' : 'post'
-    return request(apiPath.saveAndUpdate, method, params)
+    let method = params.userId ? METHOD.PUT : METHOD.POST
+    return request(apiPath, method, params)
 }
 
 
@@ -33,8 +28,8 @@ export function saveAndUpdate(params) {
  * @param id
  * @returns {*}
  */
-export function getUserById(id) {
-    return request(apiPath.info + id, 'get')
+export function info(id) {
+    return request(`${apiPath}/${id}/info`, METHOD.GET)
 }
 
 /**
@@ -43,5 +38,5 @@ export function getUserById(id) {
  * @returns {*}
  */
 export function remove(data) {
-    return request(apiPath.remove, 'delete', data)
+    return request(apiPath, METHOD.DELETE, data)
 }
